@@ -11,11 +11,43 @@ const authors = [
 
 // Query articles from content
 const { data: articles } = await useAsyncData('articles', async () => {
-  const allContent = await queryCollection('content').find()
-  // Filter out index page and limit to 6
-  return allContent
-    .filter(item => item._path !== '/index' && item._path !== '/')
-    .slice(0, 6)
+  try {
+    // Query all content items - Nuxt Content v3 syntax
+    const allContent = await queryCollection('content').all()
+
+    if (!allContent || !Array.isArray(allContent)) {
+      return []
+    }
+
+    // Filter out index, about pages and only get article markdown files
+    const filtered = allContent
+      .filter((item: any) => {
+        const path = item.path || item._path || ''
+        // Exclude index, about, and root path
+        return path !== '/index' &&
+               path !== '/' &&
+               path !== '/about'
+      })
+      .map((item: any) => {
+        // Log to see what fields are available
+        if (process.dev) {
+          console.log('Article item:', item.id, 'Date field:', item.date, 'Meta:', item.meta)
+        }
+        return item
+      })
+      .sort((a: any, b: any) => {
+        // Sort by date if available (newest first)
+        const dateA = a.date || a.meta?.date ? new Date(a.date || a.meta?.date).getTime() : (a._createdAt ? new Date(a._createdAt).getTime() : 0)
+        const dateB = b.date || b.meta?.date ? new Date(b.date || b.meta?.date).getTime() : (b._createdAt ? new Date(b._createdAt).getTime() : 0)
+        return dateB - dateA
+      })
+      .slice(0, 6)
+
+    return filtered
+  } catch (error) {
+    console.error('Error fetching articles:', error)
+    return []
+  }
 })
 </script>
 
@@ -75,32 +107,19 @@ const { data: articles } = await useAsyncData('articles', async () => {
     </section>
 
     <!-- Articles Section -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 bg-[#fef2f5]">
       <div class="max-w-7xl mx-auto px-6">
         <h2 class="flex items-center gap-2 text-2xl font-display font-semibold mb-3 text-primary mb-8">
           <Icon name="heroicons:document-text" class="w-7 h-7" />
           Latest Articles
         </h2>
         <div v-if="articles && Array.isArray(articles) && articles.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <article
+          <ArticleCard
             v-for="(article, index) in articles"
             :key="(article as Record<string, any>)?._path || index"
-            class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200"
-          >
-            <NuxtLink :to="(article as Record<string, any>)?._path || '#'" class="block">
-              <h3 class="text-xl font-display font-semibold text-gray-900 mb-2 hover:text-primary transition-colors">
-                {{ (article as Record<string, any>)?.title || ((article as Record<string, any>)?._path?.split('/').pop()) || 'Untitled' }}
-              </h3>
-              <p v-if="(article as Record<string, any>)?.description" class="text-gray-600 mb-4 line-clamp-2">
-                {{ (article as Record<string, any>).description }}
-              </p>
-              <div class="flex items-center gap-2 text-sm text-gray-500">
-                <Icon name="heroicons:calendar" class="w-4 h-4" />
-                <span v-if="(article as Record<string, any>)?.date">{{ new Date((article as Record<string, any>).date).toLocaleDateString() }}</span>
-                <span v-else-if="(article as Record<string, any>)?._createdAt">{{ new Date((article as Record<string, any>)._createdAt).toLocaleDateString() }}</span>
-              </div>
-            </NuxtLink>
-          </article>
+            :article="article as Record<string, any>"
+            :authors="authors"
+          />
         </div>
         <div v-else class="text-center py-12">
           <p class="text-gray-500">No articles found. Start creating content in the <code class="bg-gray-100 px-2 py-1 rounded">content/</code> directory.</p>

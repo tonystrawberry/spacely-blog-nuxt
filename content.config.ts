@@ -5,6 +5,10 @@ export default defineContentConfig({
     content: defineCollection({
       type: 'page',
       source: '**',
+      // Ensure frontmatter is parsed
+      parser: {
+        frontmatter: true,
+      },
     }),
   },
 })

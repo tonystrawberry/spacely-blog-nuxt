@@ -9,6 +9,9 @@ export default {
     './app/app.vue',
     './app/error.vue',
   ],
+  safelist: [
+    'rounded-lg',
+  ],
   theme: {
     extend: {
       colors: {
