@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n()
+
 interface Props {
   currentPage: number
   totalPages: number
@@ -61,7 +63,7 @@ const nextPage = computed(() => props.currentPage < props.totalPages ? props.cur
       @click="previousPage && goToPage(previousPage)"
     >
       <Icon name="heroicons:chevron-left" class="w-4 h-4 inline mr-1" />
-      Previous
+      {{ t('pagination.previous') }}
     </Button>
 
     <!-- Page Numbers -->
@@ -90,7 +92,7 @@ const nextPage = computed(() => props.currentPage < props.totalPages ? props.cur
       :disabled="!nextPage"
       @click="nextPage && goToPage(nextPage)"
     >
-      Next
+      {{ t('pagination.next') }}
       <Icon name="heroicons:chevron-right" class="w-4 h-4 inline ml-1" />
     </Button>
   </nav>

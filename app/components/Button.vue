@@ -65,14 +65,28 @@ const buttonClasses = computed(() => {
 </script>
 
 <template>
-  <component
-    :is="to ? NuxtLink : href ? 'a' : 'button'"
+  <NuxtLink
+    v-if="to"
     :to="to"
+    :class="buttonClasses"
+    @click="$emit('click', $event)"
+  >
+    <slot />
+  </NuxtLink>
+  <a
+    v-else-if="href"
     :href="href"
+    :class="buttonClasses"
+    @click="$emit('click', $event)"
+  >
+    <slot />
+  </a>
+  <button
+    v-else
     :disabled="disabled"
     :class="buttonClasses"
     @click="$emit('click', $event)"
   >
     <slot />
-  </component>
+  </button>
 </template>

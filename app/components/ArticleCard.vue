@@ -6,9 +6,24 @@ const props = defineProps<{
   authors?: Author[]
 }>()
 
+const { locale } = useI18n()
+
 const articlePath = computed(() => {
   const path = props.article.path || props.article._path
-  return path || '#'
+  if (!path) return '#'
+
+  // Remove the locale prefix from content path for URL routing
+  // Content is stored as /ja/article-slug but URL should be /article-slug (for default locale)
+  // or /en/article-slug (for non-default locale)
+  const localePrefix = `/${locale.value}/`
+  if (path.startsWith(localePrefix)) {
+    const pathWithoutLocale = path.slice(localePrefix.length - 1) // Keep the leading /
+    // For default locale (ja), return path without locale prefix
+    // For other locales, keep the locale prefix
+    return locale.value === 'ja' ? pathWithoutLocale : path
+  }
+
+  return path
 })
 
 const articleTitle = computed(() => {
@@ -36,8 +51,9 @@ const articleDate = computed(() => {
   if (dateValue) {
     try {
       const date = new Date(dateValue)
+      const dateLocale = locale.value === 'ja' ? 'ja-JP' : 'en-US'
       if (!isNaN(date.getTime())) {
-        return date.toLocaleDateString('en-US', {
+        return date.toLocaleDateString(dateLocale, {
           year: 'numeric',
           month: 'long',
           day: 'numeric'

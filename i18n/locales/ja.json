@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "articles": "記事",
+    "home": "ホーム"
+  },
+  "home": {
+    "title": "Spacely Tech Blog",
+    "subtitle": "技術愛好家のための最高のブログ。",
+    "pageTitle": "Spacely Tech Blog - ホーム"
+  },
+  "authors": {
+    "title": "著者",
+    "description": "ブログに素晴らしいコンテンツを投稿している才能ある著者たちをご紹介します。",
+    "joinTeam": "チームに参加"
+  },
+  "articles": {
+    "title": "すべての記事",
+    "latest": "最新の記事",
+    "description": "すべての記事とチュートリアルを探索",
+    "viewAll": "すべての記事を見る",
+    "noArticles": "記事が見つかりません。",
+    "noArticlesHint": "{directory} ディレクトリにコンテンツを作成してください。",
+    "showing": "{total}件中 {start}-{end} を表示",
+    "showingFiltered": "{date}の記事を{count}件表示中",
+    "clearFilter": "フィルターをクリア",
+    "pageTitle": "記事 - Spacely Tech Blog"
+  },
+  "article": {
+    "toc": "目次",
+    "noToc": "この記事には見出しがありません。"
+  },
+  "pagination": {
+    "previous": "前へ",
+    "next": "次へ"
+  },
+  "activityGrid": {
+    "articles": "件の記事",
+    "less": "少",
+    "more": "多"
+  }
+}

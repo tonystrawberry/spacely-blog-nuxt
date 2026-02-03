@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "articles": "Articles",
+    "home": "Home"
+  },
+  "home": {
+    "title": "Spacely Tech Blog",
+    "subtitle": "The best blog for tech enthusiasts.",
+    "pageTitle": "Spacely Tech Blog - Home"
+  },
+  "authors": {
+    "title": "Authors",
+    "description": "Meet our talented authors who contribute amazing content to our blog.",
+    "joinTeam": "Join the team"
+  },
+  "articles": {
+    "title": "All Articles",
+    "latest": "Latest Articles",
+    "description": "Explore all our articles and tutorials",
+    "viewAll": "View All Articles",
+    "noArticles": "No articles found.",
+    "noArticlesHint": "Start creating content in the {directory} directory.",
+    "showing": "Showing {start}-{end} of {total} articles",
+    "showingFiltered": "Showing {count} article from {date} | Showing {count} articles from {date}",
+    "clearFilter": "Clear filter",
+    "pageTitle": "Articles - Spacely Tech Blog"
+  },
+  "article": {
+    "toc": "Table of Contents",
+    "noToc": "No headings found in this article."
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "activityGrid": {
+    "articles": "article | articles",
+    "less": "Less",
+    "more": "More"
+  }
+}

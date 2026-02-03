@@ -2,10 +2,85 @@
 import type { Author } from '../types/article'
 
 const route = useRoute()
+const { t, locale, locales, setLocale } = useI18n()
 
-const { data: page } = await useAsyncData('page-' + route.path, () => {
-  return queryCollection('content').path(route.path).first()
+// Extract the article slug directly from the route path (without locale prefix)
+// This stays constant regardless of locale changes
+const articleSlug = computed(() => {
+  let path = route.path
+  // Remove locale prefix to get just the slug
+  if (path.startsWith('/ja/')) return path.slice(4)
+  if (path.startsWith('/en/')) return path.slice(4)
+  return path.slice(1) // Remove leading slash (for default locale URLs)
 })
+
+// Build the content path based on locale
+// URL: /getting-started (ja - default) or /en/getting-started (en)
+// Content: /ja/getting-started or /en/getting-started
+const contentPath = computed(() => {
+  let path = route.path
+
+  // For English locale, the URL already has /en/ prefix
+  // For Japanese (default), we need to add /ja/ prefix to match content structure
+  if (locale.value === 'ja' && !path.startsWith('/ja/')) {
+    return `/ja${path}`
+  }
+
+  return path
+})
+
+const { data: page } = await useAsyncData(
+  () => `page-${locale.value}-${route.path}`,
+  () => queryCollection('content').path(contentPath.value).first(),
+  { watch: [() => route.path, locale] }
+)
+
+// Check if translation exists in other locales
+const { data: availableTranslations } = await useAsyncData(
+  () => `translations-${articleSlug.value}`,
+  async () => {
+    const slug = articleSlug.value
+    const translations: Array<{ code: string; name: string; path: string }> = []
+
+    for (const loc of locales.value) {
+      const locCode = (loc as any).code
+      const locName = (loc as any).name
+      const translationPath = `/${locCode}/${slug}`
+
+      try {
+        const exists = await queryCollection('content').path(translationPath).first()
+        if (exists) {
+          // Build the URL path (without locale prefix for default locale)
+          const urlPath = locCode === 'ja' ? `/${slug}` : `/${locCode}/${slug}`
+          translations.push({ code: locCode, name: locName, path: urlPath })
+        }
+      } catch (e) {
+        // Translation doesn't exist
+      }
+    }
+
+    return translations
+  },
+  { watch: [() => route.path] }
+)
+
+// Check if there are multiple translations available
+const hasMultipleTranslations = computed(() => {
+  return (availableTranslations.value?.length || 0) > 1
+})
+
+// Language switcher state
+const showLanguageMenu = ref(false)
+
+const toggleLanguageMenu = () => {
+  showLanguageMenu.value = !showLanguageMenu.value
+}
+
+const switchToTranslation = (translation: { code: string; path: string }) => {
+  showLanguageMenu.value = false
+  setLocale(translation.code)
+  navigateTo(translation.path)
+}
 
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
@@ -73,8 +148,9 @@ const articleDate = computed(() => {
   if (dateValue) {
     try {
       const date = new Date(dateValue)
+      const dateLocale = locale.value === 'ja' ? 'ja-JP' : 'en-US'
       if (!isNaN(date.getTime())) {
-        return date.toLocaleDateString('en-US', {
+        return date.toLocaleDateString(dateLocale, {
           year: 'numeric',
           month: 'long',
           day: 'numeric'
@@ -169,6 +245,49 @@ const scrollToHeading = (id: string, event?: Event) => {
               <Icon v-else name="heroicons:user" class="w-4 h-4" />
               <span class="font-medium text-primary">{{ articleAuthor }}</span>
             </div>
+
+            <!-- Language Switcher (only if translation exists) -->
+            <div v-if="hasMultipleTranslations" class="relative">
+              <button
+                @click="toggleLanguageMenu"
+                class="flex items-center gap-1.5 px-3 py-1.5 text-primary bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors font-display text-sm font-medium"
+              >
+                <Icon name="heroicons:globe-alt" class="w-4 h-4" />
+                <span class="uppercase">{{ locale }}</span>
+                <Icon name="heroicons:chevron-down" class="w-3 h-3" />
+              </button>
+
+              <!-- Dropdown Menu -->
+              <Transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+              >
+                <div
+                  v-if="showLanguageMenu"
+                  class="absolute left-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-primary-100 py-1 z-50"
+                >
+                  <button
+                    v-for="translation in availableTranslations"
+                    :key="translation.code"
+                    @click="switchToTranslation(translation)"
+                    class="w-full px-4 py-2 text-left text-sm font-display hover:bg-primary-50 transition-colors flex items-center gap-2"
+                    :class="{ 'text-primary font-medium': translation.code === locale, 'text-gray-700': translation.code !== locale }"
+                  >
+                    <Icon
+                      v-if="translation.code === locale"
+                      name="heroicons:check"
+                      class="w-4 h-4 text-primary"
+                    />
+                    <span v-else class="w-4 h-4"></span>
+                    {{ translation.name }}
+                  </button>
+                </div>
+              </Transition>
+            </div>
           </div>
         </div>
       </div>
@@ -245,7 +364,7 @@ const scrollToHeading = (id: string, event?: Event) => {
             <div class="sticky top-24">
               <div class="bg-white rounded-xl p-6 shadow-sm border border-primary-100">
                 <h2 class="text-lg font-display font-semibold text-gray-900 mb-4">
-                  Table of Contents
+                  {{ t('article.toc') }}
                 </h2>
                 <nav v-if="toc && toc.length > 0" class="space-y-1.5">
                   <a
@@ -265,7 +384,7 @@ const scrollToHeading = (id: string, event?: Event) => {
                   </a>
                 </nav>
                 <p v-else class="text-sm text-gray-500">
-                  No headings found in this article.
+                  {{ t('article.noToc') }}
                 </p>
               </div>
             </div>

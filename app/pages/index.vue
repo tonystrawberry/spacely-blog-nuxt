@@ -1,6 +1,9 @@
 <script setup lang="ts">
+const { t, locale } = useI18n()
+const localePath = useLocalePath()
+
 useHead({
-  title: 'Spacely Tech Blog - Home'
+  title: computed(() => t('home.pageTitle'))
 })
 
 const authors = [
@@ -9,8 +12,8 @@ const authors = [
   { name: '@LITUATUI', avatar: 'https://i.pravatar.cc/100?img=13' },
 ]
 
-// Query articles from content
-const { data: articles } = await useAsyncData('articles', async () => {
+// Query articles from content filtered by locale
+const { data: articles } = await useAsyncData(`articles-${locale.value}`, async () => {
   try {
     // Query all content items - Nuxt Content v3 syntax
     const allContent = await queryCollection('content').all()
@@ -19,14 +22,16 @@ const { data: articles } = await useAsyncData('articles', async () => {
       return []
     }
 
-    // Filter out index, about pages and only get article markdown files
+    // Filter by locale and exclude index, about pages
     const filtered = allContent
       .filter((item: any) => {
         const path = item.path || item._path || ''
-        // Exclude index, about, and root path
-        return path !== '/index' &&
-               path !== '/' &&
-               path !== '/about'
+        // Only include items from the current locale folder
+        const isCurrentLocale = path.startsWith(`/${locale.value}/`)
+        // Exclude index, about pages
+        const isNotSpecialPage = !path.endsWith('/index') &&
+                                  !path.endsWith('/about')
+        return isCurrentLocale && isNotSpecialPage
       })
       .map((item: any) => {
         // Log to see what fields are available
@@ -48,7 +53,7 @@ const { data: articles } = await useAsyncData('articles', async () => {
     console.error('Error fetching articles:', error)
     return []
   }
-})
+}, { watch: [locale] })
 </script>
 
 <template>
@@ -69,10 +74,10 @@ const { data: articles } = await useAsyncData('articles', async () => {
           <img src="/logo.png" alt="Spacely" width="120" height="120" class="transition-transform duration-200 hover:scale-105" />
         </div>
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-primary mb-3">
-          Spacely Tech Blog
+          {{ t('home.title') }}
         </h1>
         <p class="text-xl font-medium text-primary-500 mb-6">
-          A powerful, lightweight theme for Hugo.
+          {{ t('home.subtitle') }}
         </p>
         <a href="#" class="inline-flex items-center justify-center text-primary hover:text-primary hover:scale-110 transition-transform">
           <Icon name="heroicons:link" class="w-6 h-6" />
@@ -85,10 +90,10 @@ const { data: articles } = await useAsyncData('articles', async () => {
       <div class="max-w-4xl mx-auto px-6">
         <h2 class="flex items-center justify-center gap-2 text-2xl font-display font-semibold mb-3 text-primary">
           <Icon name="heroicons:user-group" class="w-7 h-7" />
-          Authors
+          {{ t('authors.title') }}
         </h2>
         <p class="text-primary-500 text-lg mb-8">
-          Meet our talented authors who contribute amazing content to our blog.
+          {{ t('authors.description') }}
         </p>
         <div class="flex justify-center gap-8 flex-wrap mb-8">
           <div v-for="author in authors" :key="author.name" class="flex flex-col items-center gap-2">
@@ -100,9 +105,9 @@ const { data: articles } = await useAsyncData('articles', async () => {
             <span class="font-display text-sm text-primary-500">{{ author.name }}</span>
           </div>
         </div>
-        <a href="#" class="btn btn-primary text-base px-8 py-3.5">
-          Join the team
-        </a>
+        <Button variant="primary" size="lg" href="#">
+          {{ t('authors.joinTeam') }}
+        </Button>
       </div>
     </section>
 
@@ -111,7 +116,7 @@ const { data: articles } = await useAsyncData('articles', async () => {
       <div class="max-w-7xl mx-auto px-6">
         <h2 class="flex items-center gap-2 text-2xl font-display font-semibold mb-3 text-primary mb-8">
           <Icon name="heroicons:document-text" class="w-7 h-7" />
-          Latest Articles
+          {{ t('articles.latest') }}
         </h2>
         <div v-if="articles && Array.isArray(articles) && articles.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <ArticleCard
@@ -122,12 +127,12 @@ const { data: articles } = await useAsyncData('articles', async () => {
           />
         </div>
         <div v-else class="text-center py-12">
-          <p class="text-gray-500">No articles found. Start creating content in the <code class="bg-gray-100 px-2 py-1 rounded">content/</code> directory.</p>
+          <p class="text-gray-500">{{ t('articles.noArticles') }}</p>
         </div>
         <div v-if="articles && Array.isArray(articles) && articles.length > 0" class="text-center mt-8">
-          <a href="/articles" class="btn btn-primary text-base px-8 py-3.5">
-            View All Articles
-          </a>
+          <Button variant="primary" size="lg" :to="localePath('/articles')">
+            {{ t('articles.viewAll') }}
+          </Button>
         </div>
       </div>
     </section>

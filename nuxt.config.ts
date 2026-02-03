@@ -2,17 +2,29 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: [
-    '@nuxt/content',
-    '@nuxtjs/tailwindcss',
-    '@nuxt/icon',
-  ],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n'],
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
 
   content: {
     renderer: {
       anchorLinks: true
+    }
+  },
+
+  i18n: {
+    locales: [
+      { code: 'en', name: 'English', iso: 'en-US', dir: 'ltr', file: 'en.json' },
+      { code: 'ja', name: '日本語', iso: 'ja-JP', dir: 'ltr', file: 'ja.json' }
+    ],
+    defaultLocale: 'ja',
+    strategy: 'prefix_except_default',
+    lazy: true,
+    langDir: 'locales',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root'
     }
   },
 
