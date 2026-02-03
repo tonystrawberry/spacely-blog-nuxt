@@ -1,14 +1,17 @@
-import { defineContentConfig, defineCollection } from '@nuxt/content'
+import { defineContentConfig, defineCollection, z } from '@nuxt/content'
 
 export default defineContentConfig({
   collections: {
     content: defineCollection({
       type: 'page',
-      source: '**',
-      // Ensure frontmatter is parsed
-      parser: {
-        frontmatter: true,
-      },
+      source: '**/*.md',
+      schema: z.object({
+        title: z.string(),
+        description: z.string().optional(),
+        date: z.string().optional(),
+        author: z.string().optional(),
+        image: z.string().optional(),
+      })
     }),
   },
 })
