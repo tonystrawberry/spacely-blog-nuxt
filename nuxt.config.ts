@@ -9,6 +9,13 @@ export default defineNuxtConfig({
   content: {
     renderer: {
       anchorLinks: true
+    },
+    build: {
+      markdown: {
+        highlight: {
+          theme: 'github-dark'
+        }
+      }
     }
   },
 

@@ -59,6 +59,9 @@ const updateActiveHeading = () => {
 
   for (let i = headingElements.length - 1; i >= 0; i--) {
     const el = headingElements[i]
+
+    if (!el) continue
+
     const rect = el.getBoundingClientRect()
     const absoluteTop = rect.top + scrollTop
 
@@ -72,9 +75,12 @@ const updateActiveHeading = () => {
   // If no heading is above viewport, use the first one if we're near the top
   if (!currentHeading && headingElements.length > 0) {
     const firstEl = headingElements[0]
-    const rect = firstEl.getBoundingClientRect()
-    if (rect.top < window.innerHeight) {
-      currentHeading = firstEl.id
+
+    if (firstEl) {
+      const rect = firstEl.getBoundingClientRect()
+      if (rect.top < window.innerHeight) {
+        currentHeading = firstEl.id
+      }
     }
   }
 
@@ -152,7 +158,7 @@ const getPaddingClass = (level: number) => {
             ]"
           ></span>
 
-          <span class="truncate">{{ heading.text }}</span>
+          <span class="truncate font-medium">{{ heading.text }}</span>
         </a>
       </div>
     </nav>

@@ -11,11 +11,27 @@ const emit = defineEmits<{
   'date-selected': [date: string | null]
 }>()
 
-// Current selected year
+// Current selected year - defaults to most recent year with articles
 const currentYear = ref(new Date().getFullYear())
+
+// Initialize to the most recent year that has articles
+watch(() => props.articles, (articles) => {
+  if (articles.length > 0) {
+    const yearsWithArticles = articles
+      .filter(a => a.date)
+      .map(a => new Date(a.date!).getFullYear())
+    if (yearsWithArticles.length > 0) {
+      const mostRecentYear = Math.max(...yearsWithArticles)
+      currentYear.value = mostRecentYear
+    }
+  }
+}, { immediate: true })
 
 // Hovered date for tooltip
 const hoveredDay = ref<{ date: Date; count: number } | null>(null)
+
+// Selected date for filtering
+const selectedDate = ref<string | null>(null)
 
 // Get available years from articles
 const availableYears = computed(() => {
@@ -156,8 +172,17 @@ const getIntensityClass = (count: number) => {
 const formatHoveredDate = computed(() => {
   if (!hoveredDay.value || hoveredDay.value.count === -1) return ''
   const date = hoveredDay.value.date
-  const dateLocale = locale.value === 'ja' ? 'ja-JP' : 'en-US'
-  return date.toLocaleDateString(dateLocale, {
+
+  if (locale.value === 'ja') {
+    // Format: 2024年1月10日（水）
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const weekday = date.toLocaleDateString('ja-JP', { weekday: 'short' })
+    return `${year}年${month}月${day}日（${weekday}）`
+  }
+
+  return date.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'short',
     day: 'numeric',
@@ -190,9 +215,23 @@ const onCellClick = (day: { date: Date; count: number }) => {
     // Emit the date in YYYY-MM-DD format
     const dateStr = day.date.toISOString().split('T')[0]
     if (dateStr) {
+      selectedDate.value = dateStr
       emit('date-selected', dateStr)
     }
   }
+}
+
+// Clear selection
+const clearSelection = () => {
+  selectedDate.value = null
+  emit('date-selected', null)
+}
+
+// Check if a day is selected
+const isSelected = (day: { date: Date; count: number }) => {
+  if (!selectedDate.value || day.count === -1) return false
+  const dateStr = day.date.toISOString().split('T')[0]
+  return dateStr === selectedDate.value
 }
 </script>
 
@@ -250,7 +289,7 @@ const onCellClick = (day: { date: Date; count: number }) => {
           :key="dayIndex"
           :class="[
             'w-[10px] h-[10px] rounded-sm transition-colors',
-            getIntensityClass(day.count),
+            isSelected(day) ? 'bg-primary ring-2 ring-primary-400 ring-offset-1' : getIntensityClass(day.count),
             day.count >= 0 ? 'hover:ring-2 hover:ring-primary-300' : '',
             day.count > 0 ? 'cursor-pointer' : ''
           ]"
@@ -261,10 +300,10 @@ const onCellClick = (day: { date: Date; count: number }) => {
       </div>
     </div>
 
-    <!-- Footer: Hovered date on left, Legend on right -->
+    <!-- Footer: Hovered date + legend (always shown) -->
     <div class="flex items-center justify-between mt-3 h-5">
       <!-- Hovered date tooltip -->
-      <div class="text-xs text-gray-600">
+      <div class="text-xs text-primary font-medium">
         <span v-if="formatHoveredDate">{{ formatHoveredDate }}</span>
       </div>
 
@@ -279,6 +318,18 @@ const onCellClick = (day: { date: Date; count: number }) => {
         </div>
         <span>{{ t('activityGrid.more') }}</span>
       </div>
+    </div>
+
+    <!-- Clear button (shown when date selected) -->
+    <div v-if="selectedDate" class="flex items-center justify-center mt-3">
+      <Button
+        variant="outline"
+        size="sm"
+        @click="clearSelection"
+      >
+        <Icon name="heroicons:x-circle" class="w-4 h-4 mr-1" />
+        {{ t('articles.clearFilter') }}
+      </Button>
     </div>
   </div>
 </template>

@@ -252,7 +252,3 @@ Composables represent a **paradigm shift** in how we organize and share logic in
 - Build a library of reusable utilities for your projects
 
 The Composition API and composables aren't just new syntax — they're a *better way* to think about component logic. Start small, experiment with simple composables, and gradually build up your toolkit.
-
----
-
-*Have questions about composables? Drop a comment below or reach out on [Twitter](https://twitter.com)!*

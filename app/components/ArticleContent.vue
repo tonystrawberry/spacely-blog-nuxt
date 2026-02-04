@@ -6,6 +6,7 @@ defineProps<{
 
 <template>
   <div class="prose prose-lg max-w-none
+    [&_.content-body>:first-child]:mt-0
     prose-headings:font-display
     prose-headings:text-gray-900
     prose-headings:scroll-mt-24
@@ -42,9 +43,8 @@ defineProps<{
     [&_:not(pre)>code]:rounded
     prose-pre:rounded-lg
     prose-pre:overflow-x-auto
-    [&_pre]:bg-[#24292e]
+    prose-pre:p-4
     [&_pre_code]:bg-transparent
-    [&_.shiki]:bg-transparent
     prose-blockquote:border-l-4
     prose-blockquote:border-primary
     prose-blockquote:pl-4

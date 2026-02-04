@@ -99,20 +99,22 @@ const handleDateSelected = (date: string | null) => {
   }
 }
 
-// Clear date filter
-const clearDateFilter = () => {
-  selectedDate.value = null
-  navigateTo({
-    path: localePath('/articles'),
-    query: { page: '1' }
-  })
-}
 
 // Format selected date for display
 const formattedSelectedDate = computed(() => {
   if (!selectedDate.value) return null
   const date = new Date(selectedDate.value)
-  return date.toLocaleDateString(locale.value === 'ja' ? 'ja-JP' : 'en-US', {
+
+  if (locale.value === 'ja') {
+    // Format: 2024年1月10日（水）
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const weekday = date.toLocaleDateString('ja-JP', { weekday: 'short' })
+    return `${year}年${month}月${day}日（${weekday}）`
+  }
+
+  return date.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
@@ -155,37 +157,23 @@ const handlePageChange = (newPage: number) => {
               @date-selected="handleDateSelected"
             />
           </div>
-
-          <!-- Date Filter Badge -->
-          <div v-if="selectedDate" class="flex items-center justify-center gap-2 mt-4">
-            <span class="text-sm text-gray-600">
-              {{ t('articles.showingFiltered', { count: totalArticles, date: formattedSelectedDate }, totalArticles) }}
-            </span>
-            <button
-              @click="clearDateFilter"
-              class="text-sm text-primary hover:text-primary-500 font-medium flex items-center gap-1"
-            >
-              <Icon name="heroicons:x-mark" class="w-4 h-4" />
-              {{ t('articles.clearFilter') }}
-            </button>
-          </div>
         </div>
       </div>
     </section>
 
     <!-- Articles Grid -->
-    <section class="py-16">
+    <section class="py-8">
       <div class="max-w-7xl mx-auto px-6">
         <!-- Results Summary -->
-        <div v-if="totalArticles > 0" class="mb-8 text-gray-600">
-          <p class="text-sm">
-            <span v-if="selectedDate">
-              {{ t('articles.showingFiltered', { count: totalArticles, date: formattedSelectedDate }, totalArticles) }}
-            </span>
-            <span v-else>
+        <div v-if="totalArticles > 0" class="mb-8">
+          <h2 class="text-2xl font-display font-bold text-primary">
+            <template v-if="selectedDate">
+              {{ formattedSelectedDate }}
+            </template>
+            <template v-else>
               {{ t('articles.showing', { start: (page - 1) * itemsPerPage + 1, end: Math.min(page * itemsPerPage, totalArticles), total: totalArticles }) }}
-            </span>
-          </p>
+            </template>
+          </h2>
         </div>
 
         <div v-if="articles && Array.isArray(articles) && articles.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
