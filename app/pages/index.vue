@@ -16,40 +16,52 @@ const authors = [
 ]
 
 // Query articles from content filtered by locale
-const { data: articles } = await useAsyncData(`articles-${locale.value}`, async () => {
-  try {
-    // Query all content items - Nuxt Content v3 syntax
-    const allContent = await queryCollection('content').all()
+const { data: articles } = await useAsyncData(
+  `articles-${locale.value}`,
+  async () => {
+    try {
+      // Get current locale - ensure we have a value
+      const currentLocale = locale.value || 'ja'
 
-    if (!allContent || !Array.isArray(allContent)) {
+      // Query all content items - Nuxt Content v3 syntax
+      const allContent = await queryCollection('content').all()
+
+      if (!allContent || !Array.isArray(allContent)) {
+        console.warn('No content found or invalid format')
+        return []
+      }
+
+      // Filter by locale and exclude index, about pages
+      const filtered = allContent
+        .filter((item: any) => {
+          const path = item.path || item._path || ''
+          // Only include items from the current locale folder
+          const isCurrentLocale = path.startsWith(`/${currentLocale}/`)
+          // Exclude index, about pages
+          const isNotSpecialPage = !path.endsWith('/index') &&
+                                    !path.endsWith('/about')
+          return isCurrentLocale && isNotSpecialPage
+        })
+        .sort((a: any, b: any) => {
+          // Sort by date if available (newest first)
+          const dateA = a.date || a.meta?.date ? new Date(a.date || a.meta?.date).getTime() : (a._createdAt ? new Date(a._createdAt).getTime() : 0)
+          const dateB = b.date || b.meta?.date ? new Date(b.date || b.meta?.date).getTime() : (b._createdAt ? new Date(b._createdAt).getTime() : 0)
+          return dateB - dateA
+        })
+        .slice(0, 6)
+
+      return filtered
+    } catch (error) {
+      console.error('Error fetching articles:', error)
       return []
     }
-
-    // Filter by locale and exclude index, about pages
-    const filtered = allContent
-      .filter((item: any) => {
-        const path = item.path || item._path || ''
-        // Only include items from the current locale folder
-        const isCurrentLocale = path.startsWith(`/${locale.value}/`)
-        // Exclude index, about pages
-        const isNotSpecialPage = !path.endsWith('/index') &&
-                                  !path.endsWith('/about')
-        return isCurrentLocale && isNotSpecialPage
-      })
-      .sort((a: any, b: any) => {
-        // Sort by date if available (newest first)
-        const dateA = a.date || a.meta?.date ? new Date(a.date || a.meta?.date).getTime() : (a._createdAt ? new Date(a._createdAt).getTime() : 0)
-        const dateB = b.date || b.meta?.date ? new Date(b.date || b.meta?.date).getTime() : (b._createdAt ? new Date(b._createdAt).getTime() : 0)
-        return dateB - dateA
-      })
-      .slice(0, 6)
-
-    return filtered
-  } catch (error) {
-    console.error('Error fetching articles:', error)
-    return []
+  },
+  {
+    watch: [locale],
+    server: true,
+    lazy: false,
   }
-}, { watch: [locale] })
+)
 </script>
 
 <template>

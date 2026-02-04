@@ -12,6 +12,14 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
 
+  // Nitro configuration for Vercel
+  nitro: {
+    preset: 'vercel',
+  },
+
+  // Enable SSR
+  ssr: true,
+
   // @nuxtjs/seo - Site configuration
   site: {
     url: 'https://spacely.co.jp',

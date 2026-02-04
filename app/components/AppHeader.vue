@@ -70,7 +70,7 @@ const pendingLocaleName = computed(() => {
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-primary-100">
+  <header class="sticky top-0 z-50 bg-white border-b border-primary-100">
     <div class="flex items-center justify-between max-w-7xl mx-auto px-6 py-3">
       <NuxtLink :to="localePath('/')" class="flex items-center">
         <img src="/images/header-logo.jpg" alt="Spacely" width="120" height="40" class="transition-transform duration-200 hover:scale-105" />
