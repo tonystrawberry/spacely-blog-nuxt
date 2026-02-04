@@ -15,9 +15,9 @@
     "joinTeam": "チームに参加"
   },
   "articles": {
-    "title": "Vue.js・Nuxt・TypeScript 記事一覧",
+    "title": "全ての記事",
     "latest": "最新のエンジニアリング記事",
-    "description": "Vue.js、Nuxt、TypeScriptなどフロントエンド開発に関する記事を一覧で探索。初心者向けのチュートリアルから上級者向けのベストプラクティスまで、Web開発に役立つ情報が満載です。",
+    "description": "ブログに素晴らしいコンテンツを投稿している才能ある著者たちをご紹介します。",
     "viewAll": "すべての記事を見る",
     "noArticles": "記事が見つかりません。",
     "noArticlesHint": "{directory} ディレクトリにコンテンツを作成してください。",

@@ -15,16 +15,16 @@
     "joinTeam": "Join the team"
   },
   "articles": {
-    "title": "Vue.js, Nuxt & TypeScript Articles",
+    "title": "All Articles",
     "latest": "Latest Engineering Articles",
-    "description": "Browse our collection of articles covering Vue.js, Nuxt, TypeScript, and frontend best practices. From beginner tutorials to advanced techniques, find everything you need to build modern web applications.",
+    "description": "Explore all our articles and tutorials.",
     "viewAll": "View All Articles",
     "noArticles": "No articles found.",
     "noArticlesHint": "Start creating content in the {directory} directory.",
     "showing": "Showing {start}-{end} of {total} articles",
     "showingFiltered": "Showing {count} article from {date} | Showing {count} articles from {date}",
     "clearFilter": "Clear filter",
-    "pageTitle": "Vue.js, Nuxt & TypeScript Articles | Spacely Tech Blog"
+    "pageTitle": "Latest Articles | Spacely Tech Blog"
   },
   "article": {
     "toc": "Table of Contents",
