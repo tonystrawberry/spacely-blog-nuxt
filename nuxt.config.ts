@@ -23,8 +23,8 @@ export default defineNuxtConfig({
   // @nuxtjs/seo - Site configuration
   site: {
     url: 'https://spacely.co.jp',
-    name: 'Spacely Tech Blog',
-    description: 'Vue.js、Nuxt、TypeScriptなどのモダンなWeb開発技術について発信するテックブログ',
+    name: 'Spacely Tech Blog | Vue.js・Nuxt・TypeScript',
+    description: 'Spacely Tech Blogは、Vue.js、Nuxt、TypeScript、フロントエンド開発のベストプラクティスについて発信する技術ブログです。実践的なチュートリアルやコード例で、モダンなWeb開発スキルを身につけましょう。',
     defaultLocale: 'ja',
   },
 

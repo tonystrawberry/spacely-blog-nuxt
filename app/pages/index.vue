@@ -55,7 +55,7 @@ const articles = computed(() => {
     <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
       <!-- Background SVG -->
       <div class="absolute inset-0 pointer-events-none">
-        <img src="/background.svg" alt="" class="w-full h-full object-cover" />
+        <img src="/background.svg" alt="Spacely Tech Blog background pattern" class="w-full h-full object-cover" aria-hidden="true" />
       </div>
       <!-- White overlay -->
       <div class="absolute inset-0 bg-white/70 pointer-events-none"></div>

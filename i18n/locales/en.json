@@ -4,9 +4,9 @@
     "home": "Home"
   },
   "home": {
-    "title": "Spacely Tech Blog",
-    "subtitle": "The best blog for tech enthusiasts.",
-    "pageTitle": "Spacely Tech Blog - Home"
+    "title": "Vue.js, Nuxt & TypeScript Tech Blog",
+    "subtitle": "Discover in-depth tutorials, best practices, and insights on Vue.js, Nuxt, TypeScript, and modern frontend development. Level up your web development skills with practical guides and real-world examples.",
+    "pageTitle": "Spacely Tech Blog | Vue.js, Nuxt & TypeScript Frontend Development"
   },
   "authors": {
     "title": "Authors",
@@ -14,16 +14,16 @@
     "joinTeam": "Join the team"
   },
   "articles": {
-    "title": "All Articles",
-    "latest": "Latest Articles",
-    "description": "Explore all our articles and tutorials",
+    "title": "Vue.js, Nuxt & TypeScript Articles",
+    "latest": "Latest Frontend Development Articles",
+    "description": "Browse our collection of articles covering Vue.js, Nuxt, TypeScript, and frontend best practices. From beginner tutorials to advanced techniques, find everything you need to build modern web applications.",
     "viewAll": "View All Articles",
     "noArticles": "No articles found.",
     "noArticlesHint": "Start creating content in the {directory} directory.",
     "showing": "Showing {start}-{end} of {total} articles",
     "showingFiltered": "Showing {count} article from {date} | Showing {count} articles from {date}",
     "clearFilter": "Clear filter",
-    "pageTitle": "Articles - Spacely Tech Blog"
+    "pageTitle": "Vue.js, Nuxt & TypeScript Articles | Spacely Tech Blog"
   },
   "article": {
     "toc": "Table of Contents",
