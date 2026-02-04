@@ -51,9 +51,9 @@ export default defineNuxtConfig({
     }
   },
 
-  // Sitemap configuration
+  // Sitemap configuration - auto-discovers from Nuxt Content
   sitemap: {
-    sources: ['/api/__sitemap__/urls']
+    autoLastmod: true,
   },
 
   // Robots configuration (allow all, no restrictions)
