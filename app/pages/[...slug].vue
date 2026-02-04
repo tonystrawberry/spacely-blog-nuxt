@@ -69,18 +69,67 @@ const hasMultipleTranslations = computed(() => {
   return (availableTranslations.value?.length || 0) > 1
 })
 
+// Check if a specific locale has a translation
+const hasTranslation = (localeCode: string) => {
+  return availableTranslations.value?.some(t => t.code === localeCode) || false
+}
+
+// Get translation path for a locale
+const getTranslationPath = (localeCode: string) => {
+  const translation = availableTranslations.value?.find(t => t.code === localeCode)
+  return translation?.path || null
+}
+
 // Language switcher state
 const showLanguageMenu = ref(false)
+const showNoTranslationModal = ref(false)
+const pendingLocaleSwitch = ref<{ code: string; name: string } | null>(null)
+const localePath = useLocalePath()
 
 const toggleLanguageMenu = () => {
   showLanguageMenu.value = !showLanguageMenu.value
 }
 
-const switchToTranslation = (translation: { code: string; path: string }) => {
+const handleLanguageClick = (loc: { code: string; name: string }) => {
   showLanguageMenu.value = false
-  setLocale(translation.code)
-  navigateTo(translation.path)
+
+  if (loc.code === locale.value) return // Already on this language
+
+  if (hasTranslation(loc.code)) {
+    // Translation exists, switch directly
+    const path = getTranslationPath(loc.code)
+    if (path) {
+      setLocale(loc.code)
+      navigateTo(path)
+    }
+  } else {
+    // No translation, show confirmation modal
+    pendingLocaleSwitch.value = loc
+    showNoTranslationModal.value = true
+  }
 }
+
+const confirmLanguageSwitch = () => {
+  if (pendingLocaleSwitch.value) {
+    const targetLocale = pendingLocaleSwitch.value.code
+    setLocale(targetLocale)
+    // Navigate to articles page in the new locale
+    const articlesPath = targetLocale === 'ja' ? '/articles' : `/${targetLocale}/articles`
+    navigateTo(articlesPath)
+  }
+  showNoTranslationModal.value = false
+  pendingLocaleSwitch.value = null
+}
+
+const cancelLanguageSwitch = () => {
+  showNoTranslationModal.value = false
+  pendingLocaleSwitch.value = null
+}
+
+// Get localized language name for modal message
+const pendingLocaleName = computed(() => {
+  return pendingLocaleSwitch.value?.name || ''
+})
 
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
@@ -246,8 +295,8 @@ const scrollToHeading = (id: string, event?: Event) => {
               <span class="font-medium text-primary">{{ articleAuthor }}</span>
             </div>
 
-            <!-- Language Switcher (only if translation exists) -->
-            <div v-if="hasMultipleTranslations" class="relative">
+            <!-- Language Switcher (always show if there are multiple locales) -->
+            <div v-if="locales.length > 1" class="relative">
               <button
                 @click="toggleLanguageMenu"
                 class="flex items-center gap-1.5 px-3 py-1.5 text-primary bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors font-display text-sm font-medium"
@@ -268,22 +317,33 @@ const scrollToHeading = (id: string, event?: Event) => {
               >
                 <div
                   v-if="showLanguageMenu"
-                  class="absolute left-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-primary-100 py-1 z-50"
+                  class="absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-primary-100 py-1 z-50"
                 >
                   <button
-                    v-for="translation in availableTranslations"
-                    :key="translation.code"
-                    @click="switchToTranslation(translation)"
-                    class="w-full px-4 py-2 text-left text-sm font-display hover:bg-primary-50 transition-colors flex items-center gap-2"
-                    :class="{ 'text-primary font-medium': translation.code === locale, 'text-gray-700': translation.code !== locale }"
+                    v-for="loc in locales"
+                    :key="(loc as any).code"
+                    @click="handleLanguageClick({ code: (loc as any).code, name: (loc as any).name })"
+                    class="w-full px-4 py-2 text-left text-sm font-display hover:bg-primary-50 transition-colors flex items-center justify-between"
+                    :class="{
+                      'text-primary font-medium': (loc as any).code === locale,
+                      'text-gray-700': (loc as any).code !== locale
+                    }"
                   >
+                    <div class="flex items-center gap-2">
+                      <Icon
+                        v-if="(loc as any).code === locale"
+                        name="heroicons:check"
+                        class="w-4 h-4 text-primary"
+                      />
+                      <span v-else class="w-4 h-4"></span>
+                      {{ (loc as any).name }}
+                    </div>
                     <Icon
-                      v-if="translation.code === locale"
-                      name="heroicons:check"
-                      class="w-4 h-4 text-primary"
+                      v-if="!hasTranslation((loc as any).code) && (loc as any).code !== locale"
+                      name="heroicons:exclamation-triangle"
+                      class="w-4 h-4 text-amber-500"
+                      :title="t('article.noTranslation.title')"
                     />
-                    <span v-else class="w-4 h-4"></span>
-                    {{ translation.name }}
                   </button>
                 </div>
               </Transition>
@@ -392,5 +452,16 @@ const scrollToHeading = (id: string, event?: Event) => {
         </div>
       </div>
     </section>
+
+    <!-- No Translation Modal -->
+    <ConfirmModal
+      :show="showNoTranslationModal"
+      :title="t('article.noTranslation.title')"
+      :message="t('article.noTranslation.message', { language: pendingLocaleName })"
+      :confirm-text="t('article.noTranslation.confirm')"
+      :cancel-text="t('article.noTranslation.cancel')"
+      @confirm="confirmLanguageSwitch"
+      @cancel="cancelLanguageSwitch"
+    />
   </div>
 </template>

@@ -1,17 +1,105 @@
 <script setup lang="ts">
 const { t, locale, locales, setLocale } = useI18n()
 const localePath = useLocalePath()
+const switchLocalePath = useSwitchLocalePath()
+const route = useRoute()
 
 const showLanguageMenu = ref(false)
+const showNoTranslationModal = ref(false)
+const pendingLocaleSwitch = ref<{ code: string; name: string } | null>(null)
 
 const toggleLanguageMenu = () => {
   showLanguageMenu.value = !showLanguageMenu.value
 }
 
-const switchLanguage = (code: string) => {
-  setLocale(code)
-  showLanguageMenu.value = false
+// Check if we're on an article detail page
+const isArticlePage = computed(() => {
+  const path = route.path
+  // Not an article page if it's root, articles list, or special pages
+  const nonArticlePaths = ['/', '/articles', '/en', '/en/', '/ja', '/ja/', '/en/articles', '/ja/articles']
+  if (nonArticlePaths.includes(path)) return false
+  // It's an article page if there's a slug after the locale prefix or at root level
+  return path.split('/').filter(Boolean).length >= 1
+})
+
+// Extract article slug from current path
+const articleSlug = computed(() => {
+  let path = route.path
+  // Remove locale prefix to get just the slug
+  if (path.startsWith('/ja/')) return path.slice(4)
+  if (path.startsWith('/en/')) return path.slice(4)
+  return path.slice(1) // Remove leading slash
+})
+
+// Check if translation exists for a specific locale
+const checkTranslationExists = async (targetLocale: string): Promise<boolean> => {
+  if (!isArticlePage.value || !articleSlug.value) return true
+
+  // Skip check for special pages
+  if (['articles', 'index', 'about', ''].includes(articleSlug.value)) return true
+
+  const translationPath = `/${targetLocale}/${articleSlug.value}`
+
+  try {
+    const exists = await queryCollection('content').path(translationPath).first()
+    return !!exists
+  } catch (e) {
+    return false
+  }
 }
+
+const switchLanguage = async (loc: { code: string; name: string }) => {
+  showLanguageMenu.value = false
+
+  if (loc.code === locale.value) return // Already on this language
+
+  // Check if we're on an article page and if translation exists
+  if (isArticlePage.value) {
+    const hasTranslation = await checkTranslationExists(loc.code)
+
+    if (!hasTranslation) {
+      // Show confirmation modal
+      pendingLocaleSwitch.value = loc
+      showNoTranslationModal.value = true
+      return
+    }
+  }
+
+  // Translation exists or not on article page - switch directly
+  const newPath = switchLocalePath(loc.code)
+
+  // If we're on a page with query params (like articles with ?page=2),
+  // navigate without query params to reset pagination
+  if (route.query.page) {
+    await setLocale(loc.code)
+    const basePath = typeof newPath === 'string' ? newPath.split('?')[0] : newPath
+    await navigateTo(basePath)
+  } else {
+    await setLocale(loc.code)
+  }
+}
+
+const confirmLanguageSwitch = async () => {
+  if (pendingLocaleSwitch.value) {
+    const targetLocale = pendingLocaleSwitch.value.code
+    await setLocale(targetLocale)
+    // Navigate to articles page in the new locale
+    const articlesPath = targetLocale === 'ja' ? '/articles' : `/${targetLocale}/articles`
+    await navigateTo(articlesPath)
+  }
+  showNoTranslationModal.value = false
+  pendingLocaleSwitch.value = null
+}
+
+const cancelLanguageSwitch = () => {
+  showNoTranslationModal.value = false
+  pendingLocaleSwitch.value = null
+}
+
+// Get localized language name for modal message
+const pendingLocaleName = computed(() => {
+  return pendingLocaleSwitch.value?.name || ''
+})
 </script>
 
 <template>
@@ -53,7 +141,7 @@ const switchLanguage = (code: string) => {
               <button
                 v-for="loc in locales"
                 :key="(loc as any).code"
-                @click="switchLanguage((loc as any).code)"
+                @click="switchLanguage({ code: (loc as any).code, name: (loc as any).name })"
                 class="w-full px-4 py-2 text-left text-sm font-display hover:bg-primary-50 transition-colors flex items-center gap-2"
                 :class="{ 'text-primary font-medium': (loc as any).code === locale, 'text-gray-700': (loc as any).code !== locale }"
               >
@@ -71,4 +159,15 @@ const switchLanguage = (code: string) => {
       </div>
     </div>
   </header>
+
+  <!-- No Translation Modal -->
+  <ConfirmModal
+    :show="showNoTranslationModal"
+    :title="t('article.noTranslation.title')"
+    :message="t('article.noTranslation.message', { language: pendingLocaleName })"
+    :confirm-text="t('article.noTranslation.confirm')"
+    :cancel-text="t('article.noTranslation.cancel')"
+    @confirm="confirmLanguageSwitch"
+    @cancel="cancelLanguageSwitch"
+  />
 </template>

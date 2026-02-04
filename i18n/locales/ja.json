@@ -27,7 +27,13 @@
   },
   "article": {
     "toc": "目次",
-    "noToc": "この記事には見出しがありません。"
+    "noToc": "この記事には見出しがありません。",
+    "noTranslation": {
+      "title": "翻訳がありません",
+      "message": "この記事は{language}では利用できません。代わりに{language}の他の記事を閲覧しますか？",
+      "confirm": "記事を見る",
+      "cancel": "このまま"
+    }
   },
   "pagination": {
     "previous": "前へ",
