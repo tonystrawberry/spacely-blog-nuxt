@@ -24,13 +24,16 @@ export default defineNuxtConfig({
   // Enable SSR
   ssr: true,
 
-  // Route rules for static generation
+  // Route rules for static generation - all pages prerendered
   routeRules: {
+    // Japanese (default locale)
     '/': { prerender: true },
     '/articles': { prerender: true },
+    // English locale
     '/en': { prerender: true },
     '/en/articles': { prerender: true },
-    // Individual article pages (catch-all for Japanese default locale)
+    '/en/**': { prerender: true },
+    // Catch-all for any other routes
     '/**': { prerender: true },
   },
 
