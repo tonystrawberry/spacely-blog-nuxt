@@ -76,7 +76,9 @@ const weeks = computed(() => {
   props.articles.forEach(article => {
     if (article.date) {
       const dateStr = new Date(article.date).toISOString().split('T')[0]
-      articleCounts.set(dateStr, (articleCounts.get(dateStr) || 0) + 1)
+      if (dateStr) {
+        articleCounts.set(dateStr, (articleCounts.get(dateStr) || 0) + 1)
+      }
     }
   })
 
@@ -97,8 +99,10 @@ const weeks = computed(() => {
       } else {
         // Show all days of the year (including future dates)
         const dateStr = cellDate.toISOString().split('T')[0]
-        const count = articleCounts.get(dateStr) || 0
-        weekDays.push({ date: cellDate, count })
+        if (dateStr) {
+          const count = articleCounts.get(dateStr) || 0
+          weekDays.push({ date: cellDate, count })
+        }
       }
     }
 
@@ -119,7 +123,9 @@ const monthLabels = computed(() => {
   const dateLocale = locale.value === 'ja' ? 'ja-JP' : 'en-US'
 
   weeks.value.forEach((week, weekIndex) => {
-    const firstDayOfWeek = week[0].date
+    const firstDayOfWeek = week[0]?.date
+    if (!firstDayOfWeek) return
+
     const month = firstDayOfWeek.getMonth()
     const year = firstDayOfWeek.getFullYear()
 
@@ -183,7 +189,9 @@ const onCellClick = (day: { date: Date; count: number }) => {
   if (day.count > 0) {
     // Emit the date in YYYY-MM-DD format
     const dateStr = day.date.toISOString().split('T')[0]
-    emit('date-selected', dateStr)
+    if (dateStr) {
+      emit('date-selected', dateStr)
+    }
   }
 }
 </script>

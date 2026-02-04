@@ -31,13 +31,7 @@ const articleTitle = computed(() => {
 })
 
 const articleDate = computed(() => {
-  const article = props.article as any
-
-  // Debug: log all keys to see what's available
-  if (process.dev && !article.date) {
-    console.log('Article keys:', Object.keys(article))
-    console.log('Full article:', JSON.stringify(article, null, 2))
-  }
+  const article = props.article
 
   // Try multiple possible locations for the date
   const dateValue = article.date ||
@@ -107,16 +101,13 @@ const articleImage = computed(() => {
           <Icon name="heroicons:calendar" class="w-4 h-4" />
           <span v-if="articleDate">{{ articleDate }}</span>
         </div>
-        <div v-if="articleAuthor" class="flex items-center gap-2 text-primary">
-          <img
-            v-if="authorAvatar"
-            :src="authorAvatar"
-            :alt="articleAuthor"
-            class="w-6 h-6 rounded-full object-cover border border-primary-200"
-          />
-          <Icon v-else name="heroicons:user" class="w-4 h-4" />
-          <span class="font-medium text-sm">{{ articleAuthor }}</span>
-        </div>
+        <AuthorAvatar
+          v-if="articleAuthor"
+          :name="articleAuthor"
+          :avatar="authorAvatar"
+          size="sm"
+          name-position="right"
+        />
       </div>
     </NuxtLink>
   </article>

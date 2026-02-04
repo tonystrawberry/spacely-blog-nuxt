@@ -19,7 +19,6 @@ export default defineNuxtConfig({
     ],
     defaultLocale: 'ja',
     strategy: 'prefix_except_default',
-    lazy: true,
     langDir: 'locales',
     detectBrowserLanguage: {
       useCookie: true,
@@ -42,7 +41,5 @@ export default defineNuxtConfig({
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap' }
       ]
     }
-  },
-
-  css: ['@/assets/css/main.css'],
+  }
 })

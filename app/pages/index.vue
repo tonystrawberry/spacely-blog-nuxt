@@ -96,14 +96,14 @@ const { data: articles } = await useAsyncData(`articles-${locale.value}`, async 
           {{ t('authors.description') }}
         </p>
         <div class="flex justify-center gap-8 flex-wrap mb-8">
-          <div v-for="author in authors" :key="author.name" class="flex flex-col items-center gap-2">
-            <img
-              :src="author.avatar"
-              :alt="author.name"
-              class="w-20 h-20 rounded-full object-cover border-[3px] border-primary-100 hover:border-primary-200 hover:scale-105 transition-all duration-200"
-            />
-            <span class="font-display text-sm text-primary-500">{{ author.name }}</span>
-          </div>
+          <AuthorAvatar
+            v-for="author in authors"
+            :key="author.name"
+            :name="author.name"
+            :avatar="author.avatar"
+            size="lg"
+            name-position="bottom"
+          />
         </div>
         <Button variant="primary" size="lg" href="#">
           {{ t('authors.joinTeam') }}

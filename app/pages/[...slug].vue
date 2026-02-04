@@ -4,15 +4,13 @@ import type { Author } from '../types/article'
 const route = useRoute()
 const { t, locale, locales, setLocale } = useI18n()
 
-// Extract the article slug directly from the route path (without locale prefix)
-// This stays constant regardless of locale changes
-const articleSlug = computed(() => {
-  let path = route.path
-  // Remove locale prefix to get just the slug
-  if (path.startsWith('/ja/')) return path.slice(4)
-  if (path.startsWith('/en/')) return path.slice(4)
-  return path.slice(1) // Remove leading slash (for default locale URLs)
-})
+// Use shared composable for translation logic
+const {
+  articleSlug,
+  getAvailableTranslations,
+  hasTranslation: checkHasTranslation,
+  getTranslationPath: getPath
+} = useArticleTranslation()
 
 // Build the content path based on locale
 // URL: /getting-started (ja - default) or /en/getting-started (en)
@@ -35,56 +33,27 @@ const { data: page } = await useAsyncData(
   { watch: [() => route.path, locale] }
 )
 
-// Check if translation exists in other locales
+// Fetch available translations using the composable
 const { data: availableTranslations } = await useAsyncData(
   () => `translations-${articleSlug.value}`,
-  async () => {
-    const slug = articleSlug.value
-    const translations: Array<{ code: string; name: string; path: string }> = []
-
-    for (const loc of locales.value) {
-      const locCode = (loc as any).code
-      const locName = (loc as any).name
-      const translationPath = `/${locCode}/${slug}`
-
-      try {
-        const exists = await queryCollection('content').path(translationPath).first()
-        if (exists) {
-          // Build the URL path (without locale prefix for default locale)
-          const urlPath = locCode === 'ja' ? `/${slug}` : `/${locCode}/${slug}`
-          translations.push({ code: locCode, name: locName, path: urlPath })
-        }
-      } catch (e) {
-        // Translation doesn't exist
-      }
-    }
-
-    return translations
-  },
+  () => getAvailableTranslations(),
   { watch: [() => route.path] }
 )
 
-// Check if there are multiple translations available
-const hasMultipleTranslations = computed(() => {
-  return (availableTranslations.value?.length || 0) > 1
-})
-
-// Check if a specific locale has a translation
+// Check if a specific locale has a translation (using fetched data)
 const hasTranslation = (localeCode: string) => {
-  return availableTranslations.value?.some(t => t.code === localeCode) || false
+  return checkHasTranslation(availableTranslations.value || [], localeCode)
 }
 
-// Get translation path for a locale
+// Get translation path for a locale (using fetched data)
 const getTranslationPath = (localeCode: string) => {
-  const translation = availableTranslations.value?.find(t => t.code === localeCode)
-  return translation?.path || null
+  return getPath(availableTranslations.value || [], localeCode)
 }
 
 // Language switcher state
 const showLanguageMenu = ref(false)
 const showNoTranslationModal = ref(false)
 const pendingLocaleSwitch = ref<{ code: string; name: string } | null>(null)
-const localePath = useLocalePath()
 
 const toggleLanguageMenu = () => {
   showLanguageMenu.value = !showLanguageMenu.value
@@ -99,7 +68,7 @@ const handleLanguageClick = (loc: { code: string; name: string }) => {
     // Translation exists, switch directly
     const path = getTranslationPath(loc.code)
     if (path) {
-      setLocale(loc.code)
+      setLocale(loc.code as 'en' | 'ja')
       navigateTo(path)
     }
   } else {
@@ -111,7 +80,7 @@ const handleLanguageClick = (loc: { code: string; name: string }) => {
 
 const confirmLanguageSwitch = () => {
   if (pendingLocaleSwitch.value) {
-    const targetLocale = pendingLocaleSwitch.value.code
+    const targetLocale = pendingLocaleSwitch.value.code as 'en' | 'ja'
     setLocale(targetLocale)
     // Navigate to articles page in the new locale
     const articlesPath = targetLocale === 'ja' ? '/articles' : `/${targetLocale}/articles`
@@ -242,25 +211,6 @@ useHead({
   ]
 })
 
-// Smooth scroll to anchor
-const scrollToHeading = (id: string, event?: Event) => {
-  const element = document.getElementById(id)
-  if (element) {
-    event?.preventDefault()
-    const offset = 80 // Account for fixed header
-    const elementPosition = element.getBoundingClientRect().top
-    const offsetPosition = elementPosition + window.scrollY - offset
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    })
-
-    // Update URL hash without jumping
-    history.pushState(null, '', `#${id}`)
-  }
-  // If element not found, let the default anchor behavior work
-}
 </script>
 
 <template>
@@ -284,16 +234,13 @@ const scrollToHeading = (id: string, event?: Event) => {
               <Icon name="heroicons:calendar" class="w-4 h-4" />
               <span>{{ articleDate }}</span>
             </div>
-            <div v-if="articleAuthor" class="flex items-center gap-2">
-              <img
-                v-if="authorAvatar"
-                :src="authorAvatar"
-                :alt="articleAuthor"
-                class="w-6 h-6 rounded-full object-cover border border-primary-200"
-              />
-              <Icon v-else name="heroicons:user" class="w-4 h-4" />
-              <span class="font-medium text-primary">{{ articleAuthor }}</span>
-            </div>
+            <AuthorAvatar
+              v-if="articleAuthor"
+              :name="articleAuthor"
+              :avatar="authorAvatar"
+              size="sm"
+              name-position="right"
+            />
 
             <!-- Language Switcher (always show if there are multiple locales) -->
             <div v-if="locales.length > 1" class="relative">
@@ -359,94 +306,13 @@ const scrollToHeading = (id: string, event?: Event) => {
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
           <!-- Main Content -->
           <article class="lg:col-span-3">
-            <div class="prose prose-lg max-w-none
-              prose-headings:font-display
-              prose-headings:text-gray-900
-              prose-headings:scroll-mt-24
-              prose-h1:text-4xl
-              prose-h1:font-bold
-              prose-h1:mb-6
-              prose-h2:text-3xl
-              prose-h2:font-semibold
-              prose-h2:mt-12
-              prose-h2:mb-6
-              prose-h2:pt-2
-              prose-h3:text-2xl
-              prose-h3:font-semibold
-              prose-h3:mt-8
-              prose-h3:mb-4
-              prose-h3:pt-2
-              prose-p:text-gray-700
-              prose-p:leading-relaxed
-              prose-p:mb-6
-              prose-a:text-primary
-              prose-a:no-underline
-              hover:prose-a:underline
-              hover:prose-a:text-primary-500
-              prose-strong:text-gray-900
-              prose-strong:font-semibold
-              prose-code:text-primary
-              prose-code:bg-primary-50
-              prose-code:px-1.5
-              prose-code:py-0.5
-              prose-code:rounded
-              prose-code:font-mono
-              prose-code:text-sm
-              prose-pre:bg-gray-900
-              prose-pre:text-gray-100
-              prose-pre:rounded-lg
-              prose-pre:overflow-x-auto
-              prose-blockquote:border-l-4
-              prose-blockquote:border-primary
-              prose-blockquote:pl-4
-              prose-blockquote:italic
-              prose-blockquote:bg-primary-50
-              prose-blockquote:py-2
-              prose-ul:list-disc
-              prose-ol:list-decimal
-              prose-li:text-gray-700
-              prose-li:mb-2
-              prose-li:marker:text-primary
-              prose-img:rounded-lg
-              prose-img:shadow-md
-              prose-hr:border-primary-200">
-              <ContentRenderer
-                v-if="filteredPage"
-                :value="filteredPage"
-                tag="div"
-                class="content-body"
-              />
-            </div>
+            <ArticleContent :content="filteredPage" />
           </article>
 
           <!-- Table of Contents Sidebar -->
           <aside class="lg:col-span-1">
             <div class="sticky top-24">
-              <div class="bg-white rounded-xl p-6 shadow-sm border border-primary-100">
-                <h2 class="text-lg font-display font-semibold text-gray-900 mb-4">
-                  {{ t('article.toc') }}
-                </h2>
-                <nav v-if="toc && toc.length > 0" class="space-y-1.5">
-                  <a
-                    v-for="heading in toc"
-                    :key="heading.id"
-                    :href="`#${heading.id}`"
-                    @click="scrollToHeading(heading.id, $event)"
-                    class="block text-sm text-gray-600 hover:text-primary transition-colors py-1.5 border-l-2 border-transparent hover:border-primary cursor-pointer"
-                    :class="{
-                      'pl-3': heading.level === 1,
-                      'pl-4': heading.level === 2,
-                      'pl-6': heading.level === 3,
-                      'pl-8': heading.level === 4,
-                    }"
-                  >
-                    {{ heading.text }}
-                  </a>
-                </nav>
-                <p v-else class="text-sm text-gray-500">
-                  {{ t('article.noToc') }}
-                </p>
-              </div>
+              <TableOfContents :items="toc" />
             </div>
           </aside>
         </div>

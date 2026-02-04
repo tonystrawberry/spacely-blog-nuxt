@@ -4,48 +4,15 @@ const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
 const route = useRoute()
 
+// Use shared composable for translation checks
+const { isArticlePage, checkTranslationExists } = useArticleTranslation()
+
 const showLanguageMenu = ref(false)
 const showNoTranslationModal = ref(false)
 const pendingLocaleSwitch = ref<{ code: string; name: string } | null>(null)
 
 const toggleLanguageMenu = () => {
   showLanguageMenu.value = !showLanguageMenu.value
-}
-
-// Check if we're on an article detail page
-const isArticlePage = computed(() => {
-  const path = route.path
-  // Not an article page if it's root, articles list, or special pages
-  const nonArticlePaths = ['/', '/articles', '/en', '/en/', '/ja', '/ja/', '/en/articles', '/ja/articles']
-  if (nonArticlePaths.includes(path)) return false
-  // It's an article page if there's a slug after the locale prefix or at root level
-  return path.split('/').filter(Boolean).length >= 1
-})
-
-// Extract article slug from current path
-const articleSlug = computed(() => {
-  let path = route.path
-  // Remove locale prefix to get just the slug
-  if (path.startsWith('/ja/')) return path.slice(4)
-  if (path.startsWith('/en/')) return path.slice(4)
-  return path.slice(1) // Remove leading slash
-})
-
-// Check if translation exists for a specific locale
-const checkTranslationExists = async (targetLocale: string): Promise<boolean> => {
-  if (!isArticlePage.value || !articleSlug.value) return true
-
-  // Skip check for special pages
-  if (['articles', 'index', 'about', ''].includes(articleSlug.value)) return true
-
-  const translationPath = `/${targetLocale}/${articleSlug.value}`
-
-  try {
-    const exists = await queryCollection('content').path(translationPath).first()
-    return !!exists
-  } catch (e) {
-    return false
-  }
 }
 
 const switchLanguage = async (loc: { code: string; name: string }) => {
@@ -66,22 +33,22 @@ const switchLanguage = async (loc: { code: string; name: string }) => {
   }
 
   // Translation exists or not on article page - switch directly
-  const newPath = switchLocalePath(loc.code)
+  const newPath = switchLocalePath(loc.code as 'en' | 'ja')
 
   // If we're on a page with query params (like articles with ?page=2),
   // navigate without query params to reset pagination
   if (route.query.page) {
-    await setLocale(loc.code)
+    await setLocale(loc.code as 'en' | 'ja')
     const basePath = typeof newPath === 'string' ? newPath.split('?')[0] : newPath
     await navigateTo(basePath)
   } else {
-    await setLocale(loc.code)
+    await setLocale(loc.code as 'en' | 'ja')
   }
 }
 
 const confirmLanguageSwitch = async () => {
   if (pendingLocaleSwitch.value) {
-    const targetLocale = pendingLocaleSwitch.value.code
+    const targetLocale = pendingLocaleSwitch.value.code as 'en' | 'ja'
     await setLocale(targetLocale)
     // Navigate to articles page in the new locale
     const articlesPath = targetLocale === 'ja' ? '/articles' : `/${targetLocale}/articles`

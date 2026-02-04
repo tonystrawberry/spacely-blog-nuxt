@@ -1,0 +1,85 @@
+<script setup lang="ts">
+defineProps<{
+  content: any
+}>()
+</script>
+
+<template>
+  <div class="prose prose-lg max-w-none
+    prose-headings:font-display
+    prose-headings:text-gray-900
+    prose-headings:scroll-mt-24
+    prose-h1:text-4xl
+    prose-h1:font-bold
+    prose-h1:mb-6
+    prose-h2:text-3xl
+    prose-h2:font-semibold
+    prose-h2:mt-12
+    prose-h2:mb-6
+    prose-h2:pt-2
+    prose-h3:text-2xl
+    prose-h3:font-semibold
+    prose-h3:mt-8
+    prose-h3:mb-4
+    prose-h3:pt-2
+    prose-p:text-gray-700
+    prose-p:leading-relaxed
+    prose-p:mb-6
+    prose-a:text-primary
+    prose-a:no-underline
+    hover:prose-a:underline
+    hover:prose-a:text-primary-500
+    prose-strong:text-gray-900
+    prose-strong:font-semibold
+    prose-code:font-mono
+    prose-code:text-sm
+    prose-code:before:content-none
+    prose-code:after:content-none
+    [&_:not(pre)>code]:text-primary
+    [&_:not(pre)>code]:bg-primary-100
+    [&_:not(pre)>code]:px-1.5
+    [&_:not(pre)>code]:py-0.5
+    [&_:not(pre)>code]:rounded
+    prose-pre:rounded-lg
+    prose-pre:overflow-x-auto
+    [&_pre]:bg-[#24292e]
+    [&_pre_code]:bg-transparent
+    [&_.shiki]:bg-transparent
+    prose-blockquote:border-l-4
+    prose-blockquote:border-primary
+    prose-blockquote:pl-4
+    prose-blockquote:not-italic
+    prose-blockquote:bg-primary-100
+    prose-blockquote:py-0.5
+    [&_blockquote_p]:before:content-none
+    [&_blockquote_p]:after:content-none
+    prose-ul:list-disc
+    prose-ol:list-decimal
+    prose-li:text-gray-700
+    prose-li:mb-2
+    prose-li:marker:text-primary
+    prose-img:rounded-lg
+    prose-img:shadow-md
+    prose-hr:border-primary-200
+    prose-table:bg-white
+    prose-table:rounded-lg
+    prose-table:overflow-hidden
+    prose-table:shadow-sm
+    prose-thead:bg-white
+    prose-th:text-primary
+    prose-th:font-display
+    prose-th:font-semibold
+    prose-th:pl-4
+    prose-th:pt-4
+    prose-td:border-primary-100
+    prose-td:pl-4"
+  >
+    <ContentRenderer
+      v-if="content"
+      :value="content"
+      tag="div"
+      class="content-body"
+    />
+    <slot v-else />
+  </div>
+</template>
