@@ -2,8 +2,11 @@
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
-useHead({
-  title: computed(() => t('home.pageTitle'))
+// SEO - @nuxtjs/seo handles OG, Twitter, canonical automatically
+useSeoMeta({
+  title: () => t('home.pageTitle'),
+  description: () => t('home.subtitle'),
+  ogImage: '/logo.png',
 })
 
 const authors = [
@@ -32,13 +35,6 @@ const { data: articles } = await useAsyncData(`articles-${locale.value}`, async 
         const isNotSpecialPage = !path.endsWith('/index') &&
                                   !path.endsWith('/about')
         return isCurrentLocale && isNotSpecialPage
-      })
-      .map((item: any) => {
-        // Log to see what fields are available
-        if (process.dev) {
-          console.log('Article item:', item.id, 'Date field:', item.date, 'Meta:', item.meta)
-        }
-        return item
       })
       .sort((a: any, b: any) => {
         // Sort by date if available (newest first)

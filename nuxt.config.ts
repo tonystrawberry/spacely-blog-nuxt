@@ -2,9 +2,47 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n'],
+  modules: [
+    '@nuxt/content',
+    '@nuxtjs/tailwindcss',
+    '@nuxt/icon',
+    '@nuxtjs/i18n',
+    '@nuxtjs/seo'
+  ],
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
+
+  // @nuxtjs/seo - Site configuration
+  site: {
+    url: 'https://spacely.co.jp',
+    name: 'Spacely Tech Blog',
+    description: 'Vue.js、Nuxt、TypeScriptなどのモダンなWeb開発技術について発信するテックブログ',
+    defaultLocale: 'ja',
+  },
+
+  // SEO module configuration
+  seo: {
+    meta: {
+      author: 'Spacely',
+      twitterSite: '@spacely_jp',
+      twitterCreator: '@spacely_jp',
+    }
+  },
+
+  // Sitemap configuration
+  sitemap: {
+    sources: ['/api/__sitemap__/urls']
+  },
+
+  // Robots configuration (allow all, no restrictions)
+  robots: {
+    allow: '/',
+  },
+
+  // OG Image configuration
+  ogImage: {
+    enabled: true,
+  },
 
   content: {
     renderer: {
@@ -36,17 +74,20 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Spacely Tech Blog',
+      htmlAttrs: {
+        lang: 'ja',
+      },
+      titleTemplate: '%s | Spacely Tech Blog',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'A powerful, lightweight blog for modern developers' }
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap' }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       ]
     }
-  }
+  },
 })

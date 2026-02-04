@@ -203,13 +203,33 @@ const toc = computed(() => {
   }))
 })
 
-// Set page title and meta
-useHead({
-  title: `${articleTitle.value} - Spacely Tech Blog`,
-  meta: [
-    { name: 'description', content: articleDescription.value || '' }
-  ]
+// Article image URL (for OG)
+const articleImage = computed(() => {
+  return article.value?.image || '/images/articles/featured.svg'
 })
+
+// SEO - @nuxtjs/seo handles OG, Twitter, canonical automatically
+useSeoMeta({
+  title: articleTitle.value,
+  description: articleDescription.value || '',
+  ogType: 'article',
+  ogImage: articleImage.value,
+  articlePublishedTime: article.value?.date,
+  articleAuthor: articleAuthor.value || 'Spacely Team',
+})
+
+// Schema.org structured data for articles
+useSchemaOrg([
+  defineArticle({
+    headline: articleTitle.value,
+    description: articleDescription.value || '',
+    image: articleImage.value,
+    datePublished: article.value?.date,
+    author: {
+      name: articleAuthor.value || 'Spacely Team',
+    },
+  })
+])
 
 </script>
 

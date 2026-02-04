@@ -3,9 +3,13 @@ import type { Author } from '../types/article'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const route = useRoute()
 
-useHead({
-  title: computed(() => t('articles.pageTitle'))
+// SEO - @nuxtjs/seo handles OG, Twitter, canonical automatically
+useSeoMeta({
+  title: () => t('articles.pageTitle'),
+  description: () => t('articles.description'),
+  ogImage: '/logo.png',
 })
 
 const authors: Author[] = [
@@ -14,7 +18,6 @@ const authors: Author[] = [
   { name: '@LITUATUI', avatar: 'https://i.pravatar.cc/100?img=13' },
 ]
 
-const route = useRoute()
 const router = useRouter()
 
 const page = computed(() => {
