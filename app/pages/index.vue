@@ -19,6 +19,7 @@ const authors = [
 const { data: allContent } = await useAsyncData(
   'all-content',
   () => queryCollection('content').all(),
+  { lazy: false, server: true }
 )
 
 // Filter articles by current locale (reactive)
