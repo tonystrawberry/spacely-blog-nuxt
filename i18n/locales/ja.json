@@ -4,8 +4,9 @@
     "home": "ホーム"
   },
   "home": {
-    "title": "Vue.js・Nuxt・TypeScript 技術ブログ",
-    "subtitle": "Vue.js、Nuxt、TypeScriptなど最新のフロントエンド技術について、実践的なチュートリアルやベストプラクティスを発信。初心者から上級者まで、モダンなWeb開発スキルを身につけるための情報が満載です。",
+    "title": "Spacely Tech Blog",
+    "subtitle": "技術愛好家のための最高のブログ",
+    "metaDescription": "Vue.js、Nuxt、TypeScriptなど最新のフロントエンド技術について、実践的なチュートリアルやベストプラクティスを発信。初心者から上級者まで、モダンなWeb開発スキルを身につけるための情報が満載です。",
     "pageTitle": "Spacely Tech Blog | Vue.js・Nuxt・TypeScript フロントエンド開発ブログ"
   },
   "authors": {
@@ -15,7 +16,7 @@
   },
   "articles": {
     "title": "Vue.js・Nuxt・TypeScript 記事一覧",
-    "latest": "最新のフロントエンド記事",
+    "latest": "最新のエンジニアリング記事",
     "description": "Vue.js、Nuxt、TypeScriptなどフロントエンド開発に関する記事を一覧で探索。初心者向けのチュートリアルから上級者向けのベストプラクティスまで、Web開発に役立つ情報が満載です。",
     "viewAll": "すべての記事を見る",
     "noArticles": "記事が見つかりません。",

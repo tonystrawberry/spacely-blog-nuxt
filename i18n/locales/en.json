@@ -4,8 +4,9 @@
     "home": "Home"
   },
   "home": {
-    "title": "Vue.js, Nuxt & TypeScript Tech Blog",
-    "subtitle": "Discover in-depth tutorials, best practices, and insights on Vue.js, Nuxt, TypeScript, and modern frontend development. Level up your web development skills with practical guides and real-world examples.",
+    "title": "Spacely Tech Blog",
+    "subtitle": "The best blog for tech enthusiasts",
+    "metaDescription": "Discover in-depth tutorials, best practices, and insights on Vue.js, Nuxt, TypeScript, and modern frontend development. Level up your web development skills with practical guides and real-world examples.",
     "pageTitle": "Spacely Tech Blog | Vue.js, Nuxt & TypeScript Frontend Development"
   },
   "authors": {
@@ -15,7 +16,7 @@
   },
   "articles": {
     "title": "Vue.js, Nuxt & TypeScript Articles",
-    "latest": "Latest Frontend Development Articles",
+    "latest": "Latest Engineering Articles",
     "description": "Browse our collection of articles covering Vue.js, Nuxt, TypeScript, and frontend best practices. From beginner tutorials to advanced techniques, find everything you need to build modern web applications.",
     "viewAll": "View All Articles",
     "noArticles": "No articles found.",

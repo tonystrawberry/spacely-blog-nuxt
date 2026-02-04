@@ -5,7 +5,7 @@ const localePath = useLocalePath()
 // SEO - @nuxtjs/seo handles OG, Twitter, canonical automatically
 useSeoMeta({
   title: () => t('home.pageTitle'),
-  description: () => t('home.subtitle'),
+  description: () => t('home.metaDescription'),
   ogImage: '/logo.png',
 })
 
