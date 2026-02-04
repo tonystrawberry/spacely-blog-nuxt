@@ -29,8 +29,7 @@ const contentPath = computed(() => {
 
 const { data: page } = await useAsyncData(
   () => `page-${locale.value}-${route.path}`,
-  () => queryCollection('content').path(contentPath.value).first(),
-  { watch: [() => route.path, locale], lazy: false, server: true }
+  () => { return queryCollection('content').path(contentPath.value).first() }
 )
 
 // Fetch available translations using the composable

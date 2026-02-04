@@ -16,10 +16,10 @@ const authors = [
 ]
 
 // Query ALL articles from content (not filtered by locale)
+const route = useRoute()
 const { data: allContent } = await useAsyncData(
-  'all-content',
-  () => queryCollection('content').all(),
-  { lazy: false, server: true }
+  `all-content-${route.path}`,
+  () => { return queryCollection('content').all() }
 )
 
 // Filter articles by current locale (reactive)

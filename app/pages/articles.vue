@@ -33,9 +33,8 @@ const selectedDate = ref<string | null>(null)
 
 // Query ALL content (not filtered by locale - for SSR compatibility)
 const { data: allContent } = await useAsyncData(
-  'all-content',
-  () => queryCollection('content').all(),
-  { lazy: false, server: true }
+  `all-content-${route.path}`,
+  () => { return queryCollection('content').all() }
 )
 
 // Filter articles by current locale (reactive computed)

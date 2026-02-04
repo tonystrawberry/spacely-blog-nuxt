@@ -13,8 +13,5 @@ export default defineContentConfig({
         image: z.string().optional(),
       })
     }),
-  },
-  highlight: {
-    theme: 'github-dark'
   }
 })
