@@ -153,8 +153,8 @@ const handlePageChange = (newPage: number) => {
             {{ t('articles.description') }}
           </p>
 
-          <!-- Activity Grid -->
-          <div class="flex justify-center">
+          <!-- Activity Grid (hidden on mobile) -->
+          <div class="hidden md:flex justify-center">
             <ActivityGrid
               :articles="allArticles || []"
               @date-selected="handleDateSelected"
