@@ -27,14 +27,15 @@ const contentPath = computed(() => {
   return path
 })
 
+// Use a static key based on route path (not reactive locale) to avoid hydration issues
 const { data: page } = await useAsyncData(
-  () => `page-${locale.value}-${route.path}`,
-  () => { return queryCollection('content').path(contentPath.value).first() }
+  `page-${route.path}`,
+  () => queryCollection('content').path(contentPath.value).first()
 )
 
 // Fetch available translations using the composable
 const { data: availableTranslations } = await useAsyncData(
-  () => `translations-${articleSlug.value}`,
+  `translations-${route.path}`,
   () => getAvailableTranslations(),
   { watch: [() => route.path] }
 )

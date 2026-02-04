@@ -32,9 +32,20 @@ const itemsPerPage = 9
 const selectedDate = ref<string | null>(null)
 
 // Query ALL content (not filtered by locale - for SSR compatibility)
-const { data: allContent } = await useAsyncData(
-  `all-content-${route.path}`,
-  () => { return queryCollection('content').all() }
+const { data: allContent, error } = await useAsyncData(
+  'articles-content',
+  async () => {
+    try {
+      const content = await queryCollection('content').all()
+      return content || []
+    } catch (e) {
+      console.error('Error fetching content:', e)
+      return []
+    }
+  },
+  {
+    default: () => [],
+  }
 )
 
 // Filter articles by current locale (reactive computed)

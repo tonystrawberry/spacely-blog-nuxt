@@ -15,10 +15,24 @@ export default defineNuxtConfig({
   // Nitro configuration for Vercel
   nitro: {
     preset: 'vercel',
+    prerender: {
+      crawlLinks: true,
+      routes: ['/', '/articles', '/en', '/en/articles'],
+    },
   },
 
   // Enable SSR
   ssr: true,
+
+  // Route rules for static generation
+  routeRules: {
+    '/': { prerender: true },
+    '/articles': { prerender: true },
+    '/en': { prerender: true },
+    '/en/articles': { prerender: true },
+    // Individual article pages (catch-all for Japanese default locale)
+    '/**': { prerender: true },
+  },
 
   // @nuxtjs/seo - Site configuration
   site: {
