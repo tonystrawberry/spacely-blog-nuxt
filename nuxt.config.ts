@@ -15,11 +15,16 @@ export default defineNuxtConfig({
   // Enable SSR
   ssr: true,
 
-  // Enable Static Site Generation (SSG)
+  // Enable Static Site Generation (SSG) - required for Vercel
+  // better-sqlite3 doesn't work on Vercel serverless, so we must pre-render all pages
   nitro: {
+    preset: 'vercel-static',
     prerender: {
       crawlLinks: true,
-      routes: ['/', '/sitemap.xml'],
+      // Start crawling from these routes to discover all content pages
+      routes: ['/', '/articles', '/en/articles', '/sitemap.xml'],
+      // Fail build if any route errors (helps catch issues early)
+      failOnError: true,
     },
   },
 
