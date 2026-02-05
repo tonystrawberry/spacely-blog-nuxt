@@ -35,6 +35,8 @@
     "toc": "目次",
     "noToc": "この記事には見出しがありません。",
     "relatedArticles": "関連記事",
+    "writtenBy": "著者",
+    "followOnGitHub": "GitHubでフォロー",
     "noTranslation": {
       "title": "翻訳がありません",
       "message": "この記事は{language}では利用できません。代わりに{language}の他の記事を閲覧しますか？",

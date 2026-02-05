@@ -10,21 +10,29 @@ const authorsData: Author[] = [
   {
     name: '@nazar-pc',
     fullName: 'Nazar Mokrynskyi',
+    position: 'Senior Software Engineer',
+    description: 'Open source enthusiast and Rust advocate. Building decentralized systems and contributing to the web ecosystem.',
     github: 'nazar-pc',
   },
   {
     name: '@ytocquet',
     fullName: 'Yann Tocquet',
+    position: 'Frontend Developer',
+    description: 'Passionate about Vue.js and modern web technologies. Creating beautiful and performant user interfaces.',
     github: 'ytmusic',
   },
   {
     name: '@LITUATUI',
     fullName: 'LITUATUI',
+    position: 'Full Stack Developer',
+    description: 'Building web applications with a focus on developer experience and code quality.',
     github: 'LITUATUI',
   },
   {
     name: '@tonystrawberry',
     fullName: 'Tony Duong',
+    position: 'Software Engineer',
+    description: 'Full-stack developer passionate about building great products. Love TypeScript, Vue.js, and Ruby on Rails.',
     github: 'tonystrawberry',
   },
 ]

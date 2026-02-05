@@ -35,6 +35,8 @@
     "toc": "Table of Contents",
     "noToc": "No headings found in this article.",
     "relatedArticles": "Related Articles",
+    "writtenBy": "Written by",
+    "followOnGitHub": "Follow on GitHub",
     "noTranslation": {
       "title": "Translation Not Available",
       "message": "This article is not available in {language}. Would you like to browse other articles in {language} instead?",

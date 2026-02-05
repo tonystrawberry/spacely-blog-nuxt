@@ -361,6 +361,11 @@ useSchemaOrg([
           <!-- Main Content -->
           <article class="lg:col-span-3">
             <ArticleContent :content="filteredPage" />
+
+            <!-- Author Card -->
+            <div v-if="articleAuthor" class="mt-12">
+              <AuthorCard :author-name="articleAuthor" />
+            </div>
           </article>
 
           <!-- Table of Contents Sidebar -->
