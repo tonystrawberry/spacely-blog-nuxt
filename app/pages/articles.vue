@@ -45,6 +45,7 @@ const { data: allContent, error } = await useAsyncData(
   },
   {
     default: () => [],
+    server: false,
   }
 )
 

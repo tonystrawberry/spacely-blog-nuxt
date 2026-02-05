@@ -15,27 +15,10 @@ export default defineNuxtConfig({
   // Nitro configuration for Vercel
   nitro: {
     preset: 'vercel',
-    prerender: {
-      crawlLinks: true,
-      routes: ['/', '/articles', '/en', '/en/articles'],
-    },
   },
 
   // Enable SSR
   ssr: true,
-
-  // Route rules for static generation - all pages prerendered
-  routeRules: {
-    // Japanese (default locale)
-    '/': { prerender: true },
-    '/articles': { prerender: true },
-    // English locale
-    '/en': { prerender: true },
-    '/en/articles': { prerender: true },
-    '/en/**': { prerender: true },
-    // Catch-all for any other routes
-    '/**': { prerender: true },
-  },
 
   // @nuxtjs/seo - Site configuration
   site: {
@@ -54,9 +37,9 @@ export default defineNuxtConfig({
     }
   },
 
-  // Sitemap configuration - auto-discovers from Nuxt Content
+  // Sitemap configuration
   sitemap: {
-    autoLastmod: true,
+    sources: ['/api/__sitemap__/urls']
   },
 
   // Robots configuration (allow all, no restrictions)
