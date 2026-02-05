@@ -2,7 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n', '@nuxtjs/seo', '@nuxtjs/sitemap'],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n', '@nuxtjs/seo', '@nuxtjs/sitemap', '@nuxtjs/robots'],
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
 
@@ -35,7 +35,7 @@ export default defineNuxtConfig({
 
   // Sitemap configuration - auto-discovers routes via prerendering
   sitemap: {
-    autoLastmod: true,
+    urls: () => 
   },
 
   // Robots configuration (allow all, no restrictions)
