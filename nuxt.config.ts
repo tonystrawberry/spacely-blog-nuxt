@@ -80,10 +80,14 @@ export default defineNuxtConfig({
 
   studio: {
     repository: {
-      provider: 'github', // 'github' or 'gitlab'
+      provider: 'github',
       owner: 'tonystrawberry',
       repo: 'spacely-blog-nuxt',
       branch: 'master'
+    },
+    route: '/admin',
+    i18n: {
+      defaultLocale: 'ja',
     }
   },
 
