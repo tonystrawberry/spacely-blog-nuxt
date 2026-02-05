@@ -1,6 +1,8 @@
 /**
  * Composable for handling article translation checks
  */
+import { withoutTrailingSlash } from 'ufo'
+
 export const useArticleTranslation = () => {
   const route = useRoute()
   const { locale, locales } = useI18n()
@@ -61,7 +63,7 @@ export const useArticleTranslation = () => {
       const translationPath = `/${locCode}/${articlePath}`
 
       try {
-        const exists = await queryCollection('content').path(translationPath).first()
+        const exists = await queryCollection('content').path(withoutTrailingSlash(translationPath)).first()
         if (exists) {
           // Build the URL path (without locale prefix for default locale 'ja')
           const urlPath = locCode === 'ja' ? `/${articlePath}` : `/${locCode}/${articlePath}`
