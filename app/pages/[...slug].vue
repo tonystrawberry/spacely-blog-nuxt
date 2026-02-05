@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Author } from '../types/article'
+import { withoutTrailingSlash } from 'ufo'
 
 const route = useRoute()
 const { t, locale, locales, setLocale } = useI18n()
@@ -30,7 +31,7 @@ const contentPath = computed(() => {
 // Use a static key based on route path (not reactive locale) to avoid hydration issues
 const { data: page } = await useAsyncData(
   () => `page-${locale.value}-${route.path}`,
-  () => queryCollection('content').path(contentPath.value).first(),
+  () => queryCollection('content').path(withoutTrailingSlash(contentPath.value)).first(),
   { watch: [() => route.path, locale], server: false }
 )
 
