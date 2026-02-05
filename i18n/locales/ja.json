@@ -7,6 +7,8 @@
   "home": {
     "title": "Spacely Tech Blog",
     "subtitle": "技術愛好家のための最高のブログ",
+    "browseArticles": "記事を見る",
+    "discoverSpacely": "Spacelyを知る",
     "metaDescription": "Vue.js、Nuxt、TypeScriptなど最新のフロントエンド技術について、実践的なチュートリアルやベストプラクティスを発信。初心者から上級者まで、モダンなWeb開発スキルを身につけるための情報が満載です。",
     "pageTitle": "Spacely Tech Blog | Vue.js・Nuxt・TypeScript フロントエンド開発ブログ"
   },

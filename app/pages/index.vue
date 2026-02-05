@@ -74,12 +74,25 @@ const articles = computed(() => {
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-primary mb-3">
           {{ t('home.title') }}
         </h1>
-        <p class="text-xl font-medium text-primary-500 mb-6">
+        <p class="text-xl font-medium text-primary-500 mb-8">
           {{ t('home.subtitle') }}
         </p>
-        <a href="#" class="inline-flex items-center justify-center text-primary hover:text-primary hover:scale-110 transition-transform">
-          <Icon name="heroicons:link" class="w-6 h-6" />
-        </a>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Button variant="primary" size="lg" :to="localePath('/articles')">
+            <Icon name="heroicons:book-open" class="w-5 h-5 mr-2" />
+            {{ t('home.browseArticles') }}
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            href="https://spacely.co.jp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="heroicons:arrow-top-right-on-square" class="w-5 h-5 mr-2" />
+            {{ t('home.discoverSpacely') }}
+          </Button>
+        </div>
       </div>
     </section>
 
