@@ -13,26 +13,27 @@ const {
   getTranslationPath: getPath
 } = useArticleTranslation()
 
-// Build the content path based on locale
+// Build the content path based on URL structure (not locale state)
 // URL: /getting-started (ja - default) or /en/getting-started (en)
 // Content: /ja/getting-started or /en/getting-started
 const contentPath = computed(() => {
-  let path = route.path
+  const path = route.path
 
-  // For English locale, the URL already has /en/ prefix
-  // For Japanese (default), we need to add /ja/ prefix to match content structure
-  if (locale.value === 'ja' && !path.startsWith('/ja/')) {
-    return `/ja${path}`
+  // If path already has /en/ prefix, use as-is (content is at /en/...)
+  if (path.startsWith('/en/') || path === '/en') {
+    return path
   }
 
-  return path
+  // Otherwise, it's Japanese content (default locale uses no URL prefix)
+  // Add /ja/ prefix to match content file structure
+  return `/ja${path}`
 })
 
 // Fetch on server for proper SSR and 404 handling
 const { data: page } = await useAsyncData(
-  `page-${locale.value}-${route.path}`,
+  `page-${route.path}`,
   () => queryCollection('content').path(withoutTrailingSlash(contentPath.value)).first(),
-  { watch: [() => route.path, locale] }
+  { watch: [() => route.path] }
 )
 
 // Fetch available translations using the composable
