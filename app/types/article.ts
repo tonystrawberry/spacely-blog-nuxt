@@ -17,5 +17,7 @@ export interface Article {
 
 export interface Author {
   name: string
-  avatar: string
+  fullName?: string
+  github?: string
+  avatar?: string // Optional - will be generated from GitHub if not provided
 }

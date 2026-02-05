@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Author } from '../types/article'
 import { withoutTrailingSlash } from 'ufo'
 
 const route = useRoute()
 const router = useRouter()
 const { t, locale, locales, setLocale } = useI18n()
 const localePath = useLocalePath()
+const { authors } = useAuthors()
 
 // Navigate to search with category filter
 const goToCategory = (category: string) => {
@@ -119,12 +119,6 @@ const pendingLocaleName = computed(() => {
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
-
-const authors: Author[] = [
-  { name: '@nazar-pc', avatar: 'https://i.pravatar.cc/100?img=11' },
-  { name: '@ytocquet', avatar: 'https://i.pravatar.cc/100?img=12' },
-  { name: '@LITUATUI', avatar: 'https://i.pravatar.cc/100?img=13' },
-]
 
 const article = computed(() => page.value as any)
 

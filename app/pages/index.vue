@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const { authors } = useAuthors()
 
 // SEO - @nuxtjs/seo handles OG, Twitter, canonical automatically
 useSeoMeta({
@@ -8,12 +9,6 @@ useSeoMeta({
   description: () => t('home.metaDescription'),
   ogImage: '/logo.png',
 })
-
-const authors = [
-  { name: '@nazar-pc', avatar: 'https://i.pravatar.cc/100?img=11' },
-  { name: '@ytocquet', avatar: 'https://i.pravatar.cc/100?img=12' },
-  { name: '@LITUATUI', avatar: 'https://i.pravatar.cc/100?img=13' },
-]
 
 // Query ALL articles from content (not filtered by locale)
 const { data: allContent, error } = await useAsyncData(

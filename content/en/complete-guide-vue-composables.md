@@ -2,7 +2,7 @@
 title: The Complete Guide to Vue 3 Composables
 description: Master the art of building reusable logic with Vue 3 Composition API and composables. Learn patterns, best practices, and real-world examples.
 date: 2024-08-15
-author: '@nazar-pc'
+author: '@tonystrawberry'
 image: /images/articles/featured.svg
 category: Vue
 tags: [vue, composables, composition-api, typescript, reusability]

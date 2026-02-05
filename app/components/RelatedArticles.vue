@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Author } from '../types/article'
-
 const props = defineProps<{
   currentPath: string
   category?: string
@@ -10,6 +8,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { authors } = useAuthors()
 
 const limit = props.limit || 3
 
@@ -64,13 +63,6 @@ const { data: relatedArticles } = await useAsyncData(
   },
   { watch: [() => props.currentPath] }
 )
-
-// Authors for avatar display
-const authors: Author[] = [
-  { name: '@nazar-pc', avatar: 'https://i.pravatar.cc/100?img=11' },
-  { name: '@ytocquet', avatar: 'https://i.pravatar.cc/100?img=12' },
-  { name: '@LITUATUI', avatar: 'https://i.pravatar.cc/100?img=13' },
-]
 </script>
 
 <template>

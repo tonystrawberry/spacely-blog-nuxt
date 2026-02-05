@@ -5,7 +5,7 @@ import { withoutTrailingSlash } from 'ufo'
 
 export const useArticleTranslation = () => {
   const route = useRoute()
-  const { locale, locales } = useI18n()
+  const { locales } = useI18n()
 
   // Extract article slug from any path (removes locale prefix)
   const getArticleSlug = (path?: string): string => {
