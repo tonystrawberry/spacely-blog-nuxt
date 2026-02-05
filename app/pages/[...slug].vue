@@ -28,18 +28,18 @@ const contentPath = computed(() => {
   return path
 })
 
-// Use a static key based on route path (not reactive locale) to avoid hydration issues
+// Fetch on server for proper SSR and 404 handling
 const { data: page } = await useAsyncData(
   () => `page-${locale.value}-${route.path}`,
   () => queryCollection('content').path(withoutTrailingSlash(contentPath.value)).first(),
-  { watch: [() => route.path, locale], server: false }
+  { watch: [() => route.path, locale] }
 )
 
 // Fetch available translations using the composable
 const { data: availableTranslations } = await useAsyncData(
   `translations-${route.path}`,
   () => getAvailableTranslations(),
-  { watch: [() => route.path], server: false }
+  { watch: [() => route.path] }
 )
 
 // Check if a specific locale has a translation (using fetched data)
@@ -102,6 +102,7 @@ const pendingLocaleName = computed(() => {
   return pendingLocaleSwitch.value?.name || ''
 })
 
+// Throw 404 if page not found
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
