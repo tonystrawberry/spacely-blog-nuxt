@@ -19,7 +19,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ['/'],
+      routes: ['/', '/sitemap.xml'],
     },
   },
 
@@ -40,9 +40,9 @@ export default defineNuxtConfig({
     }
   },
 
-  // Sitemap configuration
+  // Sitemap configuration - auto-discovers routes via prerendering
   sitemap: {
-    sources: ['/api/__sitemap__/urls']
+    autoLastmod: true,
   },
 
   // Robots configuration (allow all, no restrictions)
