@@ -5,6 +5,15 @@ import { withoutTrailingSlash } from 'ufo'
 const route = useRoute()
 const { t, locale, locales, setLocale } = useI18n()
 
+// DEBUG: Log initial values
+console.log('=== [SLUG PAGE DEBUG] ===')
+console.log('[DEBUG] route.path:', route.path)
+console.log('[DEBUG] route.fullPath:', route.fullPath)
+console.log('[DEBUG] route.params:', JSON.stringify(route.params))
+console.log('[DEBUG] locale.value:', locale.value)
+console.log('[DEBUG] import.meta.server:', import.meta.server)
+console.log('[DEBUG] import.meta.client:', import.meta.client)
+
 // Use shared composable for translation logic
 const {
   articleSlug,
@@ -18,23 +27,82 @@ const {
 // Content: /ja/getting-started or /en/getting-started
 const contentPath = computed(() => {
   const path = route.path
+  console.log('[DEBUG contentPath] input path:', path)
+  console.log('[DEBUG contentPath] path.startsWith("/en/"):', path.startsWith('/en/'))
+  console.log('[DEBUG contentPath] path === "/en":', path === '/en')
 
   // If path already has /en/ prefix, use as-is (content is at /en/...)
   if (path.startsWith('/en/') || path === '/en') {
+    console.log('[DEBUG contentPath] returning path as-is:', path)
     return path
   }
 
   // Otherwise, it's Japanese content (default locale uses no URL prefix)
   // Add /ja/ prefix to match content file structure
-  return `/ja${path}`
+  const result = `/ja${path}`
+  console.log('[DEBUG contentPath] returning with /ja prefix:', result)
+  return result
 })
+
+// DEBUG: Log computed contentPath
+console.log('[DEBUG] contentPath.value:', contentPath.value)
+console.log('[DEBUG] withoutTrailingSlash(contentPath.value):', withoutTrailingSlash(contentPath.value))
+
+// DEBUG: List all available content paths (only on server)
+if (import.meta.server) {
+  try {
+    const allContent = await queryCollection('content').all()
+    console.log('[DEBUG] Total content items:', allContent?.length)
+    console.log('[DEBUG] All content paths:', allContent?.map((c: any) => c.path))
+  } catch (e) {
+    console.log('[DEBUG] Error listing all content:', e)
+  }
+}
 
 // Fetch on server for proper SSR and 404 handling
 const { data: page } = await useAsyncData(
   `page-${route.path}`,
-  () => queryCollection('content').path(withoutTrailingSlash(contentPath.value)).first(),
+  async () => {
+    const queryPath = withoutTrailingSlash(contentPath.value)
+    console.log('[DEBUG useAsyncData] querying path:', queryPath)
+
+    try {
+      // Try exact path match
+      const result = await queryCollection('content').path(queryPath).first()
+      console.log('[DEBUG useAsyncData] query result:', result ? 'FOUND' : 'NULL')
+
+      if (result) {
+        console.log('[DEBUG useAsyncData] result keys:', Object.keys(result))
+        console.log('[DEBUG useAsyncData] result.path:', result?.path)
+        console.log('[DEBUG useAsyncData] result.title:', (result as any)?.title)
+      } else {
+        // Try to find similar paths for debugging
+        console.log('[DEBUG useAsyncData] No exact match, checking for similar paths...')
+        const allContent = await queryCollection('content').all()
+        const similarPaths = allContent?.filter((c: any) =>
+          c.path?.includes('getting-started') ||
+          queryPath.includes(c.path?.split('/').pop() || '')
+        )
+        console.log('[DEBUG useAsyncData] Similar paths found:', similarPaths?.map((c: any) => c.path))
+      }
+
+      return result
+    } catch (error) {
+      console.log('[DEBUG useAsyncData] ERROR during query:', error)
+      throw error
+    }
+  },
   { watch: [() => route.path] }
 )
+
+// DEBUG: Log page data after fetch
+console.log('[DEBUG] page.value after fetch:', page.value ? 'EXISTS' : 'NULL')
+if (page.value) {
+  console.log('[DEBUG] page.value.path:', (page.value as any).path)
+  console.log('[DEBUG] page.value.title:', (page.value as any).title)
+} else {
+  console.log('[DEBUG] page.value is NULL - this will trigger 404')
+}
 
 // Fetch available translations using the composable
 const { data: availableTranslations } = await useAsyncData(
