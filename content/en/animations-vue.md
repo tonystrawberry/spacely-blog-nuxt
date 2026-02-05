@@ -4,6 +4,8 @@ description: Learn how to create beautiful animations and transitions in your Vu
 date: 2024-03-29
 author: '@LITUATUI'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, animations, transitions, css, ux]
 ---
 
 # Creating Smooth Animations in Vue

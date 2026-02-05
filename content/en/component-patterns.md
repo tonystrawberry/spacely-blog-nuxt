@@ -4,6 +4,8 @@ description: Learn advanced component patterns and techniques to build more main
 date: 2024-06-28
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, components, patterns, architecture, best-practices]
 ---
 
 # Advanced Vue Component Patterns

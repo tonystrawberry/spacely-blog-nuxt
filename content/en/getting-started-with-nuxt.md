@@ -4,6 +4,8 @@ description: Learn the fundamentals of Nuxt 3 and build your first application w
 date: 2024-01-15
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Nuxt
+tags: [nuxt, beginner, ssr, file-based-routing]
 ---
 
 # Getting Started with Nuxt 3

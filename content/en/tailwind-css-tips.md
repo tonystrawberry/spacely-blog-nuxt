@@ -4,6 +4,8 @@ description: Discover powerful Tailwind CSS techniques to build beautiful UIs fa
 date: 2024-02-15
 author: '@LITUATUI'
 image: /images/articles/featured.svg
+category: Frontend
+tags: [tailwind, css, styling, responsive-design]
 ---
 
 # Advanced Tailwind CSS Tips and Tricks

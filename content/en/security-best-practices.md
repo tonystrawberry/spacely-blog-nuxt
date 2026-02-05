@@ -4,6 +4,8 @@ description: Protect your Nuxt applications from common security vulnerabilities
 date: 2024-05-03
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Security
+tags: [nuxt, security, xss, csrf, best-practices]
 ---
 
 # Security Best Practices for Nuxt

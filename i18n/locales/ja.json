@@ -1,7 +1,8 @@
 {
   "nav": {
     "articles": "記事",
-    "home": "ホーム"
+    "home": "ホーム",
+    "search": "検索"
   },
   "home": {
     "title": "Spacely Tech Blog",
@@ -24,11 +25,16 @@
     "showing": "{total}件中 {start}-{end} を表示",
     "showingFiltered": "{date}の記事を{count}件表示中",
     "clearFilter": "フィルターをクリア",
+    "clearFilters": "フィルターをクリア",
+    "filterByCategory": "カテゴリー",
+    "filterByTag": "タグ",
+    "activeFilters": "適用中のフィルター",
     "pageTitle": "Vue.js・Nuxt・TypeScript 記事一覧 | Spacely Tech Blog"
   },
   "article": {
     "toc": "目次",
     "noToc": "この記事には見出しがありません。",
+    "relatedArticles": "関連記事",
     "noTranslation": {
       "title": "翻訳がありません",
       "message": "この記事は{language}では利用できません。代わりに{language}の他の記事を閲覧しますか？",
@@ -44,5 +50,16 @@
     "articles": "件の記事",
     "less": "少",
     "more": "多"
+  },
+  "search": {
+    "title": "記事を検索",
+    "placeholder": "タイトル、説明、またはコンテンツで記事を検索...",
+    "noResults": "検索条件に一致する記事が見つかりませんでした。",
+    "results": "{count}件の記事が見つかりました",
+    "filterByCategory": "カテゴリー",
+    "filterByTag": "タグ",
+    "clearFilters": "フィルターをクリア",
+    "activeFilters": "適用中のフィルター",
+    "pageTitle": "記事検索 | Spacely Tech Blog"
   }
 }

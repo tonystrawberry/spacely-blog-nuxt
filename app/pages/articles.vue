@@ -28,8 +28,7 @@ const page = computed(() => {
 
 const itemsPerPage = 9
 
-// Selected date filter
-const selectedDate = ref<string | null>(null)
+// No filters on articles page - moved to search page
 
 // Query ALL content (not filtered by locale - for SSR compatibility)
 const { data: allContent, error } = await useAsyncData(
@@ -73,63 +72,33 @@ const allArticles = computed(() => {
     })
 })
 
-// Filter articles by selected date
-const filteredArticles = computed(() => {
-  if (!allArticles.value) return []
-
-  if (selectedDate.value) {
-    return allArticles.value.filter((article: any) => {
-      if (!article.date) return false
-      const articleDate = new Date(article.date).toISOString().split('T')[0]
-      return articleDate === selectedDate.value
-    })
-  }
-
-  return allArticles.value
+// No filters - just use all articles
+const filteredArticles = computed(() => allArticles.value)
+const totalArticles = computed(() => filteredArticles.value?.length || 0)
+// Adjust total pages calculation to account for featured article
+const totalPages = computed(() => {
+  const articlesCount = !latestArticle.value
+    ? totalArticles.value
+    : Math.max(0, totalArticles.value - 1) // Subtract 1 for featured article
+  return Math.ceil(articlesCount / itemsPerPage)
 })
 
-const totalArticles = computed(() => filteredArticles.value?.length || 0)
-const totalPages = computed(() => Math.ceil(totalArticles.value / itemsPerPage))
-const articles = computed(() => {
+// Get the latest article (featured article)
+const latestArticle = computed(() => {
+  if (!filteredArticles.value || filteredArticles.value.length === 0) return null
+  return filteredArticles.value[0]
+})
+
+// Articles excluding the latest one (for the grid)
+const articlesForGrid = computed(() => {
   if (!filteredArticles.value) return []
+  // Exclude the latest article and paginate the rest
+  const articlesWithoutLatest = latestArticle.value
+    ? filteredArticles.value.slice(1)
+    : filteredArticles.value
   const start = (page.value - 1) * itemsPerPage
   const end = start + itemsPerPage
-  return filteredArticles.value.slice(start, end)
-})
-
-// Handle date selection from activity grid
-const handleDateSelected = (date: string | null) => {
-  selectedDate.value = date
-  // Reset to first page when filtering
-  if (date) {
-    navigateTo({
-      path: localePath('/articles'),
-      query: { page: '1' }
-    })
-  }
-}
-
-
-// Format selected date for display
-const formattedSelectedDate = computed(() => {
-  if (!selectedDate.value) return null
-  const date = new Date(selectedDate.value)
-
-  if (locale.value === 'ja') {
-    // Format: 2024年1月10日（水）
-    const year = date.getFullYear()
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-    const weekday = date.toLocaleDateString('ja-JP', { weekday: 'short' })
-    return `${year}年${month}月${day}日（${weekday}）`
-  }
-
-  return date.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric'
-  })
+  return articlesWithoutLatest.slice(start, end)
 })
 
 const handlePageChange = (newPage: number) => {
@@ -159,15 +128,18 @@ const handlePageChange = (newPage: number) => {
           <p class="text-lg text-gray-600 mb-8 text-center">
             {{ t('articles.description') }}
           </p>
-
-          <!-- Activity Grid (hidden on mobile) -->
-          <div class="hidden md:flex justify-center">
-            <ActivityGrid
-              :articles="allArticles || []"
-              @date-selected="handleDateSelected"
-            />
-          </div>
         </div>
+
+      </div>
+    </section>
+
+    <!-- Featured Article Section -->
+    <section v-if="latestArticle" class="py-8 bg-[#fef2f5]">
+      <div class="max-w-7xl mx-auto px-6">
+        <FeaturedArticleCard
+          :article="latestArticle as Record<string, any>"
+          :authors="authors"
+        />
       </div>
     </section>
 
@@ -175,20 +147,28 @@ const handlePageChange = (newPage: number) => {
     <section class="py-8">
       <div class="max-w-7xl mx-auto px-6">
         <!-- Results Summary -->
-        <div v-if="totalArticles > 0" class="mb-8">
-          <h2 class="text-2xl font-display font-bold text-primary">
-            <template v-if="selectedDate">
-              {{ formattedSelectedDate }}
+        <div class="mb-8">
+          <h2 v-if="totalArticles > 0" class="text-2xl font-display font-bold text-primary">
+            <template v-if="latestArticle">
+              {{ t('articles.showing', {
+                start: (page - 1) * itemsPerPage + 1,
+                end: Math.min(page * itemsPerPage, totalArticles - 1),
+                total: totalArticles - 1
+              }) }}
             </template>
             <template v-else>
-              {{ t('articles.showing', { start: (page - 1) * itemsPerPage + 1, end: Math.min(page * itemsPerPage, totalArticles), total: totalArticles }) }}
+              {{ t('articles.showing', {
+                start: (page - 1) * itemsPerPage + 1,
+                end: Math.min(page * itemsPerPage, totalArticles),
+                total: totalArticles
+              }) }}
             </template>
           </h2>
         </div>
 
-        <div v-if="articles && Array.isArray(articles) && articles.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="articlesForGrid && Array.isArray(articlesForGrid) && articlesForGrid.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <ArticleCard
-            v-for="(article, index) in articles"
+            v-for="(article, index) in articlesForGrid"
             :key="(article as Record<string, any>)?._path || (article as Record<string, any>)?.path || index"
             :article="article as Record<string, any>"
             :authors="authors"
@@ -201,7 +181,7 @@ const handlePageChange = (newPage: number) => {
       </div>
 
       <!-- Pagination -->
-      <div v-if="!selectedDate" class="max-w-7xl mx-auto px-6 mt-8">
+      <div v-if="totalPages > 1" class="max-w-7xl mx-auto px-6 mt-8">
         <Pagination
           :current-page="page"
           :total-pages="totalPages"

@@ -76,6 +76,16 @@ const articleImage = computed(() => {
   const article = props.article as any
   return article.image || article.meta?.image || article.cover || null
 })
+
+const articleCategory = computed(() => {
+  const article = props.article as any
+  return article.category || null
+})
+
+const articleTags = computed(() => {
+  const article = props.article as any
+  return article.tags || []
+})
 </script>
 
 <template>
@@ -89,12 +99,35 @@ const articleImage = computed(() => {
         />
       </div>
       <div class="flex-grow mb-4 p-6">
+        <!-- Category Badge -->
+        <div v-if="articleCategory" class="mb-3">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-primary bg-primary-50 rounded-lg">
+            <Icon name="heroicons:folder" class="w-3 h-3" />
+            {{ articleCategory }}
+          </span>
+        </div>
+
         <h3 class="text-xl font-display font-semibold text-gray-900 mb-2 hover:text-primary transition-colors line-clamp-2">
           {{ articleTitle }}
         </h3>
-        <p v-if="article.description" class="text-gray-600 line-clamp-3">
+        <p v-if="article.description" class="text-gray-600 line-clamp-3 mb-3">
           {{ article.description }}
         </p>
+
+        <!-- Tags -->
+        <div v-if="articleTags.length > 0" class="flex flex-wrap gap-1.5">
+          <span
+            v-for="tag in articleTags.slice(0, 10)"
+            :key="tag"
+            class="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs text-secondary bg-secondary-50 rounded"
+          >
+            <Icon name="heroicons:hashtag" class="w-3 h-3" />
+            {{ tag }}
+          </span>
+          <span v-if="articleTags.length > 10" class="text-xs text-gray-400">
+            +{{ articleTags.length - 10 }}
+          </span>
+        </div>
       </div>
       <div class="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100 mt-auto px-6 pb-6">
         <div class="flex items-center gap-2">

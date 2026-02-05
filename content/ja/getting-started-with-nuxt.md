@@ -4,6 +4,8 @@ description: Nuxt 3の基礎を学び、この強力なVue.jsフレームワー�
 date: 2024-01-15
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Nuxt
+tags: [nuxt, beginner, ssr, file-based-routing]
 ---
 
 # Nuxt 3 入門ガイド

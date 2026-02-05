@@ -4,6 +4,8 @@ description: Transform your Nuxt application into a Progressive Web App for bett
 date: 2024-06-21
 author: '@LITUATUI'
 image: /images/articles/featured.svg
+category: Frontend
+tags: [nuxt, pwa, progressive-web-apps, service-workers, mobile]
 ---
 
 # Building Progressive Web Apps with Nuxt

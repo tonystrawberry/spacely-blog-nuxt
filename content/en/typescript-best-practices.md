@@ -4,6 +4,8 @@ description: Learn essential TypeScript patterns and practices to write better V
 date: 2024-02-08
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, typescript, best-practices, type-safety]
 ---
 
 # TypeScript Best Practices for Vue Developers

@@ -4,6 +4,8 @@ description: Integrate GraphQL into your Nuxt applications for flexible data fet
 date: 2024-04-19
 author: '@LITUATUI'
 image: /images/articles/featured.svg
+category: Nuxt
+tags: [nuxt, graphql, apollo, data-fetching, api]
 ---
 
 # Using GraphQL with Nuxt

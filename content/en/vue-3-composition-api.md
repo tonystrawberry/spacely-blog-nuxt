@@ -4,6 +4,8 @@ description: Deep dive into Vue 3's Composition API and learn how to write more 
 date: 2024-02-01
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, composition-api, reactivity, typescript]
 ---
 
 # Mastering Vue 3 Composition API

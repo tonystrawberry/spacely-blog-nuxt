@@ -4,6 +4,8 @@ description: Learn how to measure Core Web Vitals and improve your application's
 date: 2024-07-05
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Performance
+tags: [performance, core-web-vitals, optimization, metrics, seo]
 ---
 
 # Measuring and Improving Performance Metrics

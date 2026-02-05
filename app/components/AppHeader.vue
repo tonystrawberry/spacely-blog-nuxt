@@ -76,13 +76,16 @@ const pendingLocaleName = computed(() => {
         <img src="/images/header-logo.jpg" alt="Spacely" width="120" height="40" class="transition-transform duration-200 hover:scale-105" />
       </NuxtLink>
 
-      <div class="flex items-center gap-4">
+      <div class="flex items-center">
         <NuxtLink :to="localePath('/articles')" class="px-4 py-2 font-display text-sm font-medium text-primary rounded-xl hover:bg-primary-50 hover:text-primary transition-colors">
           {{ t('nav.articles') }}
         </NuxtLink>
+        <NuxtLink :to="localePath('/search')" class="px-4 py-2 font-display text-sm font-medium text-primary rounded-xl hover:bg-primary-50 hover:text-primary transition-colors">
+          {{ t('nav.search') }}
+        </NuxtLink>
 
         <!-- Language Switcher -->
-        <div class="relative">
+        <div class="relative ml-1">
           <button
             @click="toggleLanguageMenu"
             class="flex items-center gap-1.5 p-2 text-primary hover:text-primary hover:bg-primary-50 rounded-xl transition-colors font-display text-sm font-medium"

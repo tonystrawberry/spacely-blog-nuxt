@@ -1,3 +1,10 @@
+---
+title: Welcome to Nuxt Content Starter
+description: Get started with Nuxt Content and build amazing content-driven applications.
+category: General
+tags: [welcome, getting-started, nuxt-content]
+---
+
 # Welcome to Nuxt Content Starter
 
 This is the main page displaying Markdown located at [content/index.md](https://github.com/nuxt/starter/blob/content/content/index.md).

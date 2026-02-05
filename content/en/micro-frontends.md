@@ -4,6 +4,8 @@ description: Explore micro-frontend architecture patterns and how to implement t
 date: 2024-04-12
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Architecture
+tags: [nuxt, micro-frontends, architecture, module-federation, scalability]
 ---
 
 # Micro-Frontends with Nuxt

@@ -4,6 +4,8 @@ description: Learn how to optimize your Nuxt applications for better performance
 date: 2024-02-22
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Nuxt
+tags: [nuxt, performance, optimization, ssr]
 ---
 
 # Performance Optimization in Nuxt Applications

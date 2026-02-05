@@ -245,12 +245,32 @@ useSchemaOrg([
     <section class="py-12 bg-white border-b border-primary-100">
       <div class="max-w-7xl mx-auto px-6">
         <div class="max-w-4xl">
+          <!-- Category Badge -->
+          <div v-if="article?.category" class="mb-4">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary bg-primary-50 rounded-lg">
+              <Icon name="heroicons:folder" class="w-4 h-4" />
+              {{ article.category }}
+            </span>
+          </div>
+
           <h1 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
             {{ articleTitle }}
           </h1>
           <p v-if="articleDescription" class="text-xl text-gray-600 mb-6">
             {{ articleDescription }}
           </p>
+
+          <!-- Tags -->
+          <div v-if="article?.tags && article.tags.length > 0" class="flex flex-wrap gap-2 mb-6">
+            <span
+              v-for="tag in article.tags"
+              :key="tag"
+              class="inline-flex items-center gap-1 px-2.5 py-1 text-sm text-secondary bg-secondary-50 hover:bg-secondary-100 rounded-lg transition-colors"
+            >
+              <Icon name="heroicons:hashtag" class="w-3.5 h-3.5" />
+              {{ tag }}
+            </span>
+          </div>
 
           <!-- Article Meta -->
           <div class="flex items-center gap-6 text-sm text-gray-500">
@@ -342,6 +362,15 @@ useSchemaOrg([
         </div>
       </div>
     </section>
+
+    <!-- Related Articles -->
+    <RelatedArticles
+      :current-path="contentPath"
+      :category="article?.category"
+      :tags="article?.tags"
+      :locale="locale"
+      :limit="3"
+    />
 
     <!-- No Translation Modal -->
     <ConfirmModal

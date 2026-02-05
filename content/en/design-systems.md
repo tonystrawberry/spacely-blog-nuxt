@@ -4,6 +4,8 @@ description: Create consistent, reusable component libraries for your Vue applic
 date: 2024-05-24
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Frontend
+tags: [vue, design-systems, components, ui, ux]
 ---
 
 # Building Design Systems with Vue

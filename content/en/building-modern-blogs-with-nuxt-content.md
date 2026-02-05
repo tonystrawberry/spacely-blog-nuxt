@@ -4,6 +4,8 @@ description: Discover how to create a beautiful, content-driven blog using Nuxt 
 date: 2024-01-22
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Nuxt
+tags: [nuxt, nuxt-content, markdown, blog, cms]
 ---
 
 # Building Modern Blogs with Nuxt Content

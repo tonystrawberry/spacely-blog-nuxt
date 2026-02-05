@@ -4,6 +4,8 @@ description: Improve your website's search engine rankings with these Nuxt SEO t
 date: 2024-03-01
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Nuxt
+tags: [nuxt, seo, meta-tags, ssr]
 ---
 
 # SEO Best Practices with Nuxt

@@ -1,7 +1,8 @@
 {
   "nav": {
     "articles": "Articles",
-    "home": "Home"
+    "home": "Home",
+    "search": "Search"
   },
   "home": {
     "title": "Spacely Tech Blog",
@@ -24,11 +25,16 @@
     "showing": "Showing {start}-{end} of {total} articles",
     "showingFiltered": "Showing {count} article from {date} | Showing {count} articles from {date}",
     "clearFilter": "Clear filter",
+    "clearFilters": "Clear all filters",
+    "filterByCategory": "Categories",
+    "filterByTag": "Tags",
+    "activeFilters": "Active filters",
     "pageTitle": "Latest Articles | Spacely Tech Blog"
   },
   "article": {
     "toc": "Table of Contents",
     "noToc": "No headings found in this article.",
+    "relatedArticles": "Related Articles",
     "noTranslation": {
       "title": "Translation Not Available",
       "message": "This article is not available in {language}. Would you like to browse other articles in {language} instead?",
@@ -44,5 +50,16 @@
     "articles": "article | articles",
     "less": "Less",
     "more": "More"
+  },
+  "search": {
+    "title": "Search Articles",
+    "placeholder": "Search articles by title, description, or content...",
+    "noResults": "No articles found matching your search.",
+    "results": "Found {count} article | Found {count} articles",
+    "filterByCategory": "Category",
+    "filterByTag": "Tag",
+    "clearFilters": "Clear all filters",
+    "activeFilters": "Active filters",
+    "pageTitle": "Search Articles | Spacely Tech Blog"
   }
 }

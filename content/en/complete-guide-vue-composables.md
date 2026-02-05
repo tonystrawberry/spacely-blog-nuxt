@@ -4,6 +4,8 @@ description: Master the art of building reusable logic with Vue 3 Composition AP
 date: 2024-08-15
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, composables, composition-api, typescript, reusability]
 ---
 
 # The Complete Guide to Vue 3 Composables

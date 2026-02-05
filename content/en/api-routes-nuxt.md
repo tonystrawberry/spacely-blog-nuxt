@@ -4,6 +4,8 @@ description: Build server-side API endpoints directly in your Nuxt application.
 date: 2024-05-31
 author: '@LITUATUI'
 image: /images/articles/featured.svg
+category: Nuxt
+tags: [nuxt, api, server-routes, backend, full-stack]
 ---
 
 # Creating API Routes in Nuxt

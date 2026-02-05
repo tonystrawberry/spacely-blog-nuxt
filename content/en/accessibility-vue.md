@@ -4,6 +4,8 @@ description: Learn how to make your Vue applications accessible to all users, in
 date: 2024-04-05
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, accessibility, a11y, aria, wcag]
 ---
 
 # Building Accessible Vue Applications

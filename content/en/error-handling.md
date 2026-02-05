@@ -4,6 +4,8 @@ description: Implement robust error handling strategies to provide better user e
 date: 2024-04-26
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Nuxt
+tags: [nuxt, error-handling, debugging, best-practices]
 ---
 
 # Error Handling in Nuxt Applications

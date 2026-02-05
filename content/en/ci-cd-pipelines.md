@@ -4,6 +4,8 @@ description: Automate testing, building, and deployment with continuous integrat
 date: 2024-06-07
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: DevOps
+tags: [nuxt, ci-cd, github-actions, automation, testing]
 ---
 
 # CI/CD Pipelines for Nuxt Projects

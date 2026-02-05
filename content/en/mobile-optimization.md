@@ -4,6 +4,8 @@ description: Optimize your Nuxt applications for mobile devices and improve mobi
 date: 2024-06-14
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Frontend
+tags: [nuxt, mobile, responsive-design, optimization, pwa]
 ---
 
 # Mobile Optimization for Nuxt Apps

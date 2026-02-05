@@ -4,6 +4,8 @@ description: Master Pinia, the official state management solution for Vue applic
 date: 2024-03-15
 author: '@nazar-pc'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, pinia, state-management, typescript]
 ---
 
 # State Management with Pinia

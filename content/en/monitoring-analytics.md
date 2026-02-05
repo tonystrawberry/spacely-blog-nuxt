@@ -4,6 +4,8 @@ description: Track user behavior and application performance with proper monitor
 date: 2024-05-10
 author: '@LITUATUI'
 image: /images/articles/featured.svg
+category: DevOps
+tags: [nuxt, monitoring, analytics, performance, tracking]
 ---
 
 # Monitoring and Analytics in Nuxt

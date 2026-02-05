@@ -4,6 +4,8 @@ description: Vue 3のComposition APIを使って、より整理された再利�
 date: 2024-01-10
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, composition-api, reactivity, typescript]
 ---
 
 # Vue 3 Composition API 完全ガイド

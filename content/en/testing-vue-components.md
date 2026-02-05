@@ -4,6 +4,8 @@ description: Write comprehensive tests for your Vue components using Vitest and 
 date: 2024-03-08
 author: '@LITUATUI'
 image: /images/articles/featured.svg
+category: Vue
+tags: [vue, testing, vitest, unit-testing]
 ---
 
 # Testing Vue Components with Vitest

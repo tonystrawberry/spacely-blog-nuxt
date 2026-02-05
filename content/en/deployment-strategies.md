@@ -4,6 +4,8 @@ description: Explore different deployment options for your Nuxt applications, fr
 date: 2024-03-22
 author: '@ytocquet'
 image: /images/articles/featured.svg
+category: DevOps
+tags: [nuxt, deployment, vercel, serverless, ssr]
 ---
 
 # Deployment Strategies for Nuxt Applications
