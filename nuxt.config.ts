@@ -34,9 +34,7 @@ export default defineNuxtConfig({
   },
 
   // Sitemap configuration - auto-discovers routes via prerendering
-  sitemap: {
-    urls: () => 
-  },
+  sitemap: {},
 
   // Robots configuration (allow all, no restrictions)
   robots: {
