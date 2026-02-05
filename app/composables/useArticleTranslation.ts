@@ -45,7 +45,7 @@ export const useArticleTranslation = () => {
     const translationPath = `/${targetLocale}/${articlePath}`
 
     try {
-      const exists = await queryCollection('content').path(translationPath).first()
+      const exists = await queryCollection('content').path(withoutTrailingSlash(translationPath)).first()
       return !!exists
     } catch (e) {
       return false
