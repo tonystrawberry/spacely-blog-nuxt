@@ -1,11 +1,17 @@
 ---
 title: Vue 3 Composition API 完全ガイド
-description: Vue 3のComposition APIを使って、より整理された再利用可能なコードを書く方法を学びましょう。
-date: 2024-01-10
-author: '@ytocquet'
-image: /images/articles/featured.svg
+author: "@ytocquet"
 category: Vue
-tags: [vue, composition-api, reactivity, typescript]
+date: 2024-01-10
+description: Vue 3のComposition APIを使って、より整理された再利用可能なコードを書く方法を学びましょう。
+image: /images/articles/featured.svg
+sitemap:
+  loc: /ja/articles/vue-3-composition-api
+tags:
+  - vue
+  - composition-api
+  - reactivity
+  - typescript
 ---
 
 # Vue 3 Composition API 完全ガイド

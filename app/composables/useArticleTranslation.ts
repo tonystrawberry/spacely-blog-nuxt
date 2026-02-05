@@ -7,27 +7,22 @@ export const useArticleTranslation = () => {
   const route = useRoute()
   const { locales } = useI18n()
 
-  // Extract article slug from any path (removes locale prefix)
+  // Extract article slug from any path (removes locale prefix and /articles/)
   const getArticleSlug = (path?: string): string => {
     const p = path || route.path
-    if (p.startsWith('/ja/')) return p.slice(4)
-    if (p.startsWith('/en/')) return p.slice(4)
-    return p.slice(1) // Remove leading slash
+    // Remove locale prefix and /articles/
+    // e.g., /ja/articles/getting-started -> getting-started
+    // e.g., /en/articles/getting-started -> getting-started
+    const match = p.match(/^\/(ja|en)\/articles\/(.+)$/)
+    if (match && match[2]) return match[2]
+    return ''
   }
 
   // Check if current page is an article detail page
   const isArticlePage = computed(() => {
     const path = route.path
-    // Not an article page if it's root, articles list, or special pages
-    const nonArticlePaths = ['/', '/articles', '/en', '/en/', '/ja', '/ja/', '/en/articles', '/ja/articles']
-    if (nonArticlePaths.includes(path)) return false
-
-    const slug = getArticleSlug(path)
-    // Skip special pages
-    if (['articles', 'index', 'about', ''].includes(slug)) return false
-
-    // It's an article page if there's a slug
-    return slug.length > 0
+    // It's an article page if it matches /{locale}/articles/{slug}
+    return /^\/(ja|en)\/articles\/.+$/.test(path)
   })
 
   // Current article slug (reactive)
@@ -39,10 +34,7 @@ export const useArticleTranslation = () => {
 
     if (!articlePath) return true
 
-    // Skip check for special pages
-    if (['articles', 'index', 'about', ''].includes(articlePath)) return true
-
-    const translationPath = `/${targetLocale}/${articlePath}`
+    const translationPath = `/${targetLocale}/articles/${articlePath}`
 
     try {
       const exists = await queryCollection('content').path(withoutTrailingSlash(translationPath)).first()
@@ -57,16 +49,18 @@ export const useArticleTranslation = () => {
     const articlePath = slug || articleSlug.value
     const translations: Array<{ code: string; name: string; path: string }> = []
 
+    if (!articlePath) return translations
+
     for (const loc of locales.value) {
       const locCode = (loc as any).code
       const locName = (loc as any).name
-      const translationPath = `/${locCode}/${articlePath}`
+      const translationPath = `/${locCode}/articles/${articlePath}`
 
       try {
         const exists = await queryCollection('content').path(withoutTrailingSlash(translationPath)).first()
         if (exists) {
-          // Build the URL path (without locale prefix for default locale 'ja')
-          const urlPath = locCode === 'ja' ? `/${articlePath}` : `/${locCode}/${articlePath}`
+          // Build the URL path (with prefix strategy, all locales have prefix)
+          const urlPath = `/${locCode}/articles/${articlePath}`
           translations.push({ code: locCode, name: locName, path: urlPath })
         }
       } catch (e) {

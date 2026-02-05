@@ -27,18 +27,8 @@ const goToTag = (tag: string, event: Event) => {
 const articlePath = computed(() => {
   const path = props.article.path || props.article._path
   if (!path) return '#'
-
-  // Remove the locale prefix from content path for URL routing
-  // Content is stored as /ja/article-slug but URL should be /article-slug (for default locale)
-  // or /en/article-slug (for non-default locale)
-  const localePrefix = `/${locale.value}/`
-  if (path.startsWith(localePrefix)) {
-    const pathWithoutLocale = path.slice(localePrefix.length - 1) // Keep the leading /
-    // For default locale (ja), return path without locale prefix
-    // For other locales, keep the locale prefix
-    return locale.value === 'ja' ? pathWithoutLocale : path
-  }
-
+  // With prefix strategy, content path matches URL path directly
+  // e.g., /ja/articles/getting-started or /en/articles/getting-started
   return path
 })
 

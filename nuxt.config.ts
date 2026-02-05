@@ -69,7 +69,7 @@ export default defineNuxtConfig({
       { code: 'ja', name: '日本語', iso: 'ja-JP', dir: 'ltr', file: 'ja.json' }
     ],
     defaultLocale: 'ja',
-    strategy: 'prefix_except_default',
+    strategy: 'prefix',
     langDir: 'locales',
     detectBrowserLanguage: {
       useCookie: true,

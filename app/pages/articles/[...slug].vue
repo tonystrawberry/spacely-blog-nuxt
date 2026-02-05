@@ -25,20 +25,12 @@ const {
   getTranslationPath: getPath
 } = useArticleTranslation()
 
-// Build the content path based on URL structure (not locale state)
-// URL: /getting-started (ja - default) or /en/getting-started (en)
-// Content: /ja/getting-started or /en/getting-started
+// Build the content path based on URL structure
+// URL: /ja/articles/slug or /en/articles/slug
+// Content: /ja/articles/slug or /en/articles/slug
 const contentPath = computed(() => {
-  const path = route.path
-
-  // If path already has /en/ prefix, use as-is (content is at /en/...)
-  if (path.startsWith('/en/') || path === '/en') {
-    return path
-  }
-
-  // Otherwise, it's Japanese content (default locale uses no URL prefix)
-  // Add /ja/ prefix to match content file structure
-  return `/ja${path}`
+  // With prefix strategy, URL path matches content path directly
+  return route.path
 })
 
 // Fetch on server for proper SSR and 404 handling
@@ -98,8 +90,7 @@ const confirmLanguageSwitch = () => {
     const targetLocale = pendingLocaleSwitch.value.code as 'en' | 'ja'
     setLocale(targetLocale)
     // Navigate to articles page in the new locale
-    const articlesPath = targetLocale === 'ja' ? '/articles' : `/${targetLocale}/articles`
-    navigateTo(articlesPath)
+    navigateTo(localePath('/articles'))
   }
   showNoTranslationModal.value = false
   pendingLocaleSwitch.value = null

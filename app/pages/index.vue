@@ -28,7 +28,7 @@ const { data: allContent, error } = await useAsyncData(
   }
 )
 
-// Filter articles by current locale (reactive)
+// Filter articles by current locale (from articles directory)
 const articles = computed(() => {
   if (!allContent.value || !Array.isArray(allContent.value)) return []
 
@@ -37,12 +37,9 @@ const articles = computed(() => {
   return allContent.value
     .filter((item: any) => {
       const path = item.path || item._path || ''
-      // Only include items from the current locale folder
-      const isCurrentLocale = path.startsWith(`/${currentLocale}/`)
-      // Exclude index, about pages
-      const isNotSpecialPage = !path.endsWith('/index') &&
-                                !path.endsWith('/about')
-      return isCurrentLocale && isNotSpecialPage
+      // Only include items from the current locale's articles folder
+      const isArticle = path.startsWith(`/${currentLocale}/articles/`)
+      return isArticle
     })
     .sort((a: any, b: any) => {
       // Sort by date if available (newest first)

@@ -12,18 +12,16 @@ const { authors } = useAuthors()
 
 const limit = props.limit || 3
 
-// Build the locale prefix for content queries
-const localePrefix = computed(() => `/${props.locale}/`)
+// Build the locale prefix for content queries (articles are in /{locale}/articles/)
+const localePrefix = computed(() => `/${props.locale}/articles/`)
 
 // Fetch related articles based on category and tags
 const { data: relatedArticles } = await useAsyncData(
   `related-${props.currentPath}`,
   async () => {
-    // Get all articles in the same locale (excluding index pages)
+    // Get all articles in the same locale from the articles directory
     const allArticles = await queryCollection('content')
       .where('path', 'LIKE', `${localePrefix.value}%`)
-      .where('path', 'NOT LIKE', '%/index')
-      .where('path', 'NOT LIKE', '%/about')
       .all()
 
     // Filter out current article

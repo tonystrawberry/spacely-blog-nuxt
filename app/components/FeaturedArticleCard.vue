@@ -27,13 +27,8 @@ const goToTag = (tag: string, event: Event) => {
 const articlePath = computed(() => {
   const path = props.article.path || props.article._path
   if (!path) return '#'
-
-  const localePrefix = `/${locale.value}/`
-  if (path.startsWith(localePrefix)) {
-    const pathWithoutLocale = path.slice(localePrefix.length - 1)
-    return locale.value === 'ja' ? pathWithoutLocale : path
-  }
-
+  // With prefix strategy, content path matches URL path directly
+  // e.g., /ja/articles/getting-started or /en/articles/getting-started
   return path
 })
 
