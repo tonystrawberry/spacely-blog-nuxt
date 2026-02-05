@@ -2,13 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: [
-    '@nuxt/content',
-    '@nuxtjs/tailwindcss',
-    '@nuxt/icon',
-    '@nuxtjs/i18n',
-    '@nuxtjs/seo'
-  ],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n', '@nuxtjs/seo', '@nuxtjs/sitemap'],
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
 
@@ -24,7 +18,7 @@ export default defineNuxtConfig({
 
   // @nuxtjs/seo - Site configuration
   site: {
-    url: 'https://spacely.co.jp',
+    url: 'https://spacely-blog-nuxt.vercel.app/',
     name: 'Spacely Tech Blog | Vue.js・Nuxt・TypeScript',
     description: 'Spacely Tech Blogは、Vue.js、Nuxt、TypeScript、フロントエンド開発のベストプラクティスについて発信する技術ブログです。実践的なチュートリアルやコード例で、モダンなWeb開発スキルを身につけましょう。',
     defaultLocale: 'ja',
