@@ -15,6 +15,14 @@ export default defineNuxtConfig({
   // Enable SSR
   ssr: true,
 
+  // Enable Static Site Generation (SSG)
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ['/'],
+    },
+  },
+
   // @nuxtjs/seo - Site configuration
   site: {
     url: 'https://spacely.co.jp',
