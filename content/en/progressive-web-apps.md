@@ -1,11 +1,20 @@
 ---
 title: Building Progressive Web Apps with Nuxt
-description: Transform your Nuxt application into a Progressive Web App for better mobile experience.
-date: 2024-06-21
-author: '@LITUATUI'
-image: /images/articles/featured.svg
+author: "@LITUATUI"
 category: Frontend
-tags: [nuxt, pwa, progressive-web-apps, service-workers, mobile]
+date: 2024-06-21
+description: Transform your Nuxt application into a Progressive Web App for better mobile experience.
+image: /images/articles/featured.svg
+sitemap:
+  loc: /en/progressive-web-apps
+  videos: []
+  images: []
+tags:
+  - nuxt
+  - pwa
+  - progressive-web-apps
+  - service-workers
+  - mobile
 ---
 
 # Building Progressive Web Apps with Nuxt
@@ -14,7 +23,7 @@ PWAs combine the best of web and mobile apps. Learn how to build one with Nuxt.
 
 ## Service Workers
 
-Implement service workers for offline functionality and background sync.
+This is a test by Tony! Bro, it's awesome!
 
 ## Web App Manifest
 
