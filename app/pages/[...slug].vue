@@ -30,7 +30,7 @@ const contentPath = computed(() => {
 
 // Fetch on server for proper SSR and 404 handling
 const { data: page } = await useAsyncData(
-  () => `page-${locale.value}-${route.path}`,
+  `page-${locale.value}-${route.path}`,
   () => queryCollection('content').path(withoutTrailingSlash(contentPath.value)).first(),
   { watch: [() => route.path, locale] }
 )
