@@ -103,7 +103,13 @@ const articles = computed(() => {
             name-position="bottom"
           />
         </div>
-        <Button variant="primary" size="lg" href="#">
+        <Button
+          variant="primary"
+          size="lg"
+          href="https://corp.spacely.co.jp/recruit/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {{ t('authors.joinTeam') }}
         </Button>
       </div>
