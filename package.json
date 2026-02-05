@@ -19,6 +19,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@vercel/analytics": "^1.6.1",
     "better-sqlite3": "^12.6.2",
-    "nuxt": "^4.3.0"
+    "nuxt": "^4.3.0",
+    "nuxt-studio": "^1.2.0"
   }
 }
