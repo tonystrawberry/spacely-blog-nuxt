@@ -7,6 +7,22 @@ const props = defineProps<{
 }>()
 
 const { locale } = useI18n()
+const localePath = useLocalePath()
+const router = useRouter()
+
+// Navigate to search with category filter
+const goToCategory = (category: string, event: Event) => {
+  event.preventDefault()
+  event.stopPropagation()
+  router.push(localePath({ path: '/search', query: { category } }))
+}
+
+// Navigate to search with tag filter
+const goToTag = (tag: string, event: Event) => {
+  event.preventDefault()
+  event.stopPropagation()
+  router.push(localePath({ path: '/search', query: { tag } }))
+}
 
 const articlePath = computed(() => {
   const path = props.article.path || props.article._path
@@ -107,10 +123,13 @@ const articleTags = computed(() => {
           <div>
             <!-- Category Badge -->
             <div v-if="articleCategory" class="mb-4">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary bg-primary-50 rounded-lg">
+              <button
+                @click="goToCategory(articleCategory, $event)"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
+              >
                 <Icon name="heroicons:folder" class="w-4 h-4" />
                 {{ articleCategory }}
-              </span>
+              </button>
             </div>
 
             <h2 class="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4 hover:text-primary transition-colors line-clamp-3">
@@ -123,14 +142,15 @@ const articleTags = computed(() => {
 
             <!-- Tags -->
             <div v-if="articleTags.length > 0" class="flex flex-wrap gap-2 mb-6">
-              <span
+              <button
                 v-for="tag in articleTags.slice(0, 8)"
                 :key="tag"
-                class="inline-flex items-center gap-1 px-2.5 py-1 text-sm text-secondary bg-secondary-50 rounded-lg"
+                @click="goToTag(tag, $event)"
+                class="inline-flex items-center gap-1 px-2.5 py-1 text-sm text-secondary bg-secondary-50 rounded-lg hover:bg-secondary-100 transition-colors"
               >
                 <Icon name="heroicons:hashtag" class="w-3.5 h-3.5" />
                 {{ tag }}
-              </span>
+              </button>
               <span v-if="articleTags.length > 8" class="inline-flex items-center px-2.5 py-1 text-sm text-gray-500">
                 +{{ articleTags.length - 8 }}
               </span>

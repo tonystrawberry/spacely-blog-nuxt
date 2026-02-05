@@ -3,7 +3,19 @@ import type { Author } from '../types/article'
 import { withoutTrailingSlash } from 'ufo'
 
 const route = useRoute()
+const router = useRouter()
 const { t, locale, locales, setLocale } = useI18n()
+const localePath = useLocalePath()
+
+// Navigate to search with category filter
+const goToCategory = (category: string) => {
+  router.push(localePath({ path: '/search', query: { category } }))
+}
+
+// Navigate to search with tag filter
+const goToTag = (tag: string) => {
+  router.push(localePath({ path: '/search', query: { tag } }))
+}
 
 // Use shared composable for translation logic
 const {
@@ -247,10 +259,13 @@ useSchemaOrg([
         <div class="max-w-4xl">
           <!-- Category Badge -->
           <div v-if="article?.category" class="mb-4">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary bg-primary-50 rounded-lg">
+            <button
+              @click="goToCategory(article.category)"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
+            >
               <Icon name="heroicons:folder" class="w-4 h-4" />
               {{ article.category }}
-            </span>
+            </button>
           </div>
 
           <h1 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
@@ -262,14 +277,15 @@ useSchemaOrg([
 
           <!-- Tags -->
           <div v-if="article?.tags && article.tags.length > 0" class="flex flex-wrap gap-2 mb-6">
-            <span
+            <button
               v-for="tag in article.tags"
               :key="tag"
+              @click="goToTag(tag)"
               class="inline-flex items-center gap-1 px-2.5 py-1 text-sm text-secondary bg-secondary-50 hover:bg-secondary-100 rounded-lg transition-colors"
             >
               <Icon name="heroicons:hashtag" class="w-3.5 h-3.5" />
               {{ tag }}
-            </span>
+            </button>
           </div>
 
           <!-- Article Meta -->

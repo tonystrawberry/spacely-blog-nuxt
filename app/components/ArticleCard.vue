@@ -7,6 +7,22 @@ const props = defineProps<{
 }>()
 
 const { locale } = useI18n()
+const localePath = useLocalePath()
+const router = useRouter()
+
+// Navigate to search with category filter
+const goToCategory = (category: string, event: Event) => {
+  event.preventDefault()
+  event.stopPropagation()
+  router.push(localePath({ path: '/search', query: { category } }))
+}
+
+// Navigate to search with tag filter
+const goToTag = (tag: string, event: Event) => {
+  event.preventDefault()
+  event.stopPropagation()
+  router.push(localePath({ path: '/search', query: { tag } }))
+}
 
 const articlePath = computed(() => {
   const path = props.article.path || props.article._path
@@ -101,10 +117,13 @@ const articleTags = computed(() => {
       <div class="flex-grow mb-4 p-6">
         <!-- Category Badge -->
         <div v-if="articleCategory" class="mb-3">
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-primary bg-primary-50 rounded-lg">
+          <button
+            @click="goToCategory(articleCategory, $event)"
+            class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-primary bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
+          >
             <Icon name="heroicons:folder" class="w-3 h-3" />
             {{ articleCategory }}
-          </span>
+          </button>
         </div>
 
         <h3 class="text-xl font-display font-semibold text-gray-900 mb-2 hover:text-primary transition-colors line-clamp-2">
@@ -116,14 +135,15 @@ const articleTags = computed(() => {
 
         <!-- Tags -->
         <div v-if="articleTags.length > 0" class="flex flex-wrap gap-1.5">
-          <span
+          <button
             v-for="tag in articleTags.slice(0, 10)"
             :key="tag"
-            class="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs text-secondary bg-secondary-50 rounded"
+            @click="goToTag(tag, $event)"
+            class="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs text-secondary bg-secondary-50 rounded hover:bg-secondary-100 transition-colors"
           >
             <Icon name="heroicons:hashtag" class="w-3 h-3" />
             {{ tag }}
-          </span>
+          </button>
           <span v-if="articleTags.length > 10" class="text-xs text-gray-400">
             +{{ articleTags.length - 10 }}
           </span>

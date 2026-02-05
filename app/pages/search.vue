@@ -18,10 +18,10 @@ const authors: Author[] = [
   { name: '@LITUATUI', avatar: 'https://i.pravatar.cc/100?img=13' },
 ]
 
-// Search query
-const searchQuery = ref<string>('')
-const selectedCategory = ref<string | null>(null)
-const selectedTag = ref<string | null>(null)
+// Initialize from query params
+const searchQuery = ref<string>((route.query.q as string) || '')
+const selectedCategory = ref<string | null>((route.query.category as string) || null)
+const selectedTag = ref<string | null>((route.query.tag as string) || null)
 
 // Query ALL content
 const { data: allContent } = await useAsyncData(
