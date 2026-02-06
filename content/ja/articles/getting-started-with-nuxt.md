@@ -1,18 +1,24 @@
 ---
 title: Nuxt 3 入門ガイド
-description: Nuxt 3の基礎を学び、この強力なVue.jsフレームワークで最初のアプリケーションを構築しましょう。
-date: 2024-01-15
-author: '@nazar-pc'
-image: /images/articles/featured.svg
+author: "@nazar-pc"
 category: Nuxt
-tags: [nuxt, beginner, ssr, file-based-routing]
+date: 2024-01-15
+description: Nuxt 3の基礎を学び、この強力なVue.jsフレームワークで最初のアプリケーションを構築しましょう。
+image: /images/articles/featured.svg
+sitemap:
+  loc: /ja/articles/getting-started-with-nuxt
+tags:
+  - nuxt
+  - beginner
+  - ssr
+  - file-based-routing
 ---
 
 # Nuxt 3 入門ガイド
 
 Nuxt 3は、Vue.jsの上に構築された強力なフレームワークで、モダンなWebアプリケーションを簡単に構築できます。この記事では、主要な機能を探り、最初のNuxtアプリケーションを始めましょう。
 
-## Nuxt 3とは？
+## Nuxt 3とは？Grandpa \:D
 
 Nuxt 3は、Nuxtフレームワークの最新バージョンで、パフォーマンスの向上、TypeScriptサポートの改善、より開発者フレンドリーな体験を提供します。Vue.jsアプリケーションの構築をより速く、より楽しくするように設計されています。
 
