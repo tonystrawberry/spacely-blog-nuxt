@@ -80,7 +80,7 @@ const authorAvatar = computed(() => {
 
 const articleImage = computed(() => {
   const article = props.article as any
-  return article.image || article.meta?.image || article.cover || null
+  return article.image || article.meta?.image || article.cover || '/images/articles/featured.svg'
 })
 
 const articleCategory = computed(() => {
@@ -97,7 +97,7 @@ const articleTags = computed(() => {
 <template>
   <article class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 h-full flex flex-col">
     <NuxtLink :to="articlePath" class="block flex flex-col h-full">
-      <div v-if="articleImage" class="w-full h-48 overflow-hidden bg-primary-200">
+      <div class="w-full h-48 overflow-hidden bg-primary-100">
         <img
           :src="articleImage"
           :alt="articleTitle"
