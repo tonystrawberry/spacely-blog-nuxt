@@ -1,11 +1,18 @@
 ---
 title: Building Accessible Vue Applications
-description: Learn how to make your Vue applications accessible to all users, including those using assistive technologies.
+author: "@nazar-pc"
+category: Nuxt
 date: 2024-04-05
-author: '@nazar-pc'
+description: Learn how to make your Vue applications accessible to all users, including those using assistive technologies.
 image: /images/articles/featured.svg
-category: Vue
-tags: [vue, accessibility, a11y, aria, wcag]
+sitemap:
+  loc: /en/articles/accessibility-vue
+  videos: []
+  images: []
+tags:
+  - vue
+  - accessibility
+  - ""
 ---
 
 # Building Accessible Vue Applications
