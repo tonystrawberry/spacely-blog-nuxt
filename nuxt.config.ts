@@ -2,7 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n', '@nuxtjs/seo', '@nuxtjs/sitemap', '@nuxtjs/robots', 'nuxt-studio'],
+  modules: ['@nuxtjs/sitemap', '@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n', '@nuxtjs/seo', '@nuxtjs/robots', 'nuxt-studio'],
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
 
