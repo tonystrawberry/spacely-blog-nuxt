@@ -7,13 +7,13 @@ export default defineContentConfig({
       type: 'page',
       source: '**/*.md',
       schema: z.object({
-        title: z.string().optional(),
-        description: z.string().optional(),
-        date: z.string().optional(),
-        author: z.string().optional(),
+        title: z.string().default(''),
+        description: z.string().default(''),
+        date: z.string().default(new Date().toISOString().split('T')[0]),
+        author: z.string().default(''),
         image: z.string().optional(),
-        category: z.string().optional(),
-        tags: z.array(z.string()).optional(),
+        category: z.string().default(''),
+        tags: z.array(z.string()).default([]),
       })
     })),
   }
